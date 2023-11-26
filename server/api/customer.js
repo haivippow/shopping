@@ -85,7 +85,7 @@ router.post('/login', async function (req, res) {
       if (customer.active === 1) {
         const id = customer._id;
         const token = JwtUtil.genToken(id,username);
-        res.json({ success: true, message: 'Authentication successful', token: token});
+        res.json({ success: true, message: 'Authentication successful', token: token,customer:customer});
      
       } else {
         res.json({ success: false, message: 'Account is deactive' });

@@ -38,7 +38,7 @@ class Home extends Component {
     return (
       <div>
         <Slider/>
-        <div className="align-center">
+        <div className="align-center" style={{ marginTop: '30px' }}>
        
           <h2 className="text-center">SẢN PHẨM MỚI NHẤT</h2>
           {newprods}

@@ -104,7 +104,7 @@ router.post('/login', async function(req, res) {
     const admin = await AdminDAO.selectByUsernameAndPassword(username, password);
     if (admin) {
       const token = JwtUtil.genToken(admin._id,admin.username);
-      res.json({ success: true, message: 'Authentication successful', token: token});
+      res.json({ success: true, message: 'Authentication successful', token: token,admin:admin});
     } else {
       res.json({ success: false, message: 'Incorrect username or password' });
     }

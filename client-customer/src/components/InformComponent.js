@@ -27,9 +27,9 @@ class Inform extends Component {
         </div>
 
         <div className="float-left" onMouseLeave={() => this.toggleLinks(false)} onMouseEnter={() => this.toggleLinks(true)}>
-            {this.context.customer == null ? (
+            {this.context.customer === null ? (
               <div>
-                <Link to='/login' style={{ textDecoration: 'none' }}>Đăng Nhập</Link> | <Link to='/signup' style={{ textDecoration: 'none' }}>Đăng Ký</Link>
+                <Link to='/login' style={{ textDecoration: 'none' }}>Đăng Nhập</Link> | <Link to='/signup' style={{ textDecoration: 'none' }}>Đăng Ký |</Link>
               </div>
             ) : (
               <div className="profile-container">
