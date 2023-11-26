@@ -14,26 +14,30 @@ class Home extends Component {
   }
   render() {
     const newprods = this.state.newprods.map((item) => {
-      return (
-        <div key={item._id} className="inline">
-          <figure>
-          <Link to={'/product/' + item._id}><img src={"data:image/jpg;base64," + item.image} width="300px" height="300px" alt="" /></Link>
-            <figcaption className="text-center">Tên Sản Phẩm: {item.name}<br />Giá: {(item.price).toLocaleString('vi-VN')} VNĐ</figcaption>
-          </figure>
-        </div>
-      );
+      if (item && item._id) {
+        return (
+          <div key={item._id} className="inline">
+            <figure>
+            <Link to={'/product/' + item._id}><img src={"data:image/jpg;base64," + item.image} width="300px" height="300px" alt="" /></Link>
+              <figcaption className="text-center">Tên Sản Phẩm: {item.name}<br />Giá: {(item.price).toLocaleString('vi-VN')} VNĐ</figcaption>
+            </figure>
+          </div>
+        );
+      }
     });
     const hotprods = this.state.hotprods.map((item) => {
-      return (
-        <div key={item._id} className="inline">
-          <figure>
-            
-          <Link to={'/product/' + item._id}><img src={"data:image/jpg;base64," + item.image} width="300px" height="300px" alt="" /></Link>
-            <figcaption className="text-center">Tên sản phẩm: {item.name}<br />Giá: {(item.price).toLocaleString('vi-VN')} VNĐ</figcaption>
-          </figure>
-        </div>
-        
-      );
+      if (item && item._id) {
+        return (
+          <div key={item._id} className="inline">
+            <figure>
+              
+            <Link to={'/product/' + item._id}><img src={"data:image/jpg;base64," + item.image} width="300px" height="300px" alt="" /></Link>
+              <figcaption className="text-center">Tên sản phẩm: {item.name}<br />Giá: {(item.price).toLocaleString('vi-VN')} VNĐ</figcaption>
+            </figure>
+          </div>
+          
+        );
+      }
     });
     return (
       <div>
