@@ -21,7 +21,7 @@ const adminRoutes = ['/admin', '/admin/category', '/admin/size', '/admin/product
 
 // Serve the files at '/admin' from client-admin/build/*
 app.use('/admin', express.static(path.resolve(__dirname, '../client-admin/build')));
-app.get(adminRoutes.map(route => `/admin${route}`), (req, res) => {
+app.get(adminRoutes.map(route => `${route}`), (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client-admin/build', 'index.html'));
 });
 // '/admin' serve the files at client-admin/build/* as static files
