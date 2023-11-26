@@ -88,15 +88,36 @@ class Order extends Component {
     );
   }
   componentDidMount() {
+    this.GetAdminToken();
     this.apiGetOrders();
   }
+  GetAdminToken(){
+    const token_admin = localStorage.getItem('token_admin');
+    const config = { headers: { 'x-access-token': token_admin } };
+    axios.get('/api/admin/getadmintoken/', config).then((res) => {
+      const result = res.data;
+      if (result && result.success === false) {
+        this.context.setAdmin(null);
+        this.context.setToken('');
+      } else {
+        this.context.setToken(token_admin);
+       this.context.setAdmin(result);
+      
+      }
+    });
+
+  }
+
+
+
+
   // event-handlers
   trItemClick(item) {
     this.setState({ order: item });
   }
   // apis
   apiGetOrders() {
-    const config = { headers: { 'x-access-token': this.context.admin.token_web_admin } };
+    const config = { headers: { 'x-access-token': this.context.token  } };
     axios.get('/api/admin/orders', config).then((res) => {
       const result = res.data;
       this.setState({ orders: result });
@@ -111,7 +132,7 @@ class Order extends Component {
   // apis
   apiPutOrderStatus(id, status) {
     const body = { status: status };
-    const config = { headers: { 'x-access-token': this.context.admin.token_web_admin} };
+    const config = { headers: { 'x-access-token': this.context.token } };
     axios.put('/api/admin/orders/status/' + id, body, config).then((res) => {
       const result = res.data;
       if (result) {

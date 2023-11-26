@@ -59,6 +59,8 @@ class Mycart extends Component {
     if (index !== -1) { // found, remove item
       mycart.splice(index, 1);
       this.context.setMycart(mycart);
+      localStorage.setItem('mycart', JSON.stringify(mycart));
+
     }
   }
   lnkCheckoutClick() {
@@ -69,6 +71,14 @@ class Mycart extends Component {
       alert('Your cart is empty');
     }
     
+  }
+
+  componentDidMount() {
+    const storedMycart = localStorage.getItem('mycart');
+    if (storedMycart) {
+      const mycart = JSON.parse(storedMycart);
+      this.context.setMycart(mycart);
+    }
   }
 
 

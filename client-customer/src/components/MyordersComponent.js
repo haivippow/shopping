@@ -13,7 +13,7 @@ class Myorders extends Component {
     };
   }
   render() {
-    if (this.context.customer === '') return (<Navigate replace to='/login' />);
+    if (this.context.customer === "") return (<Navigate replace to='/login' />);
     const orders = this.state.orders.map((item) => {
       let Straddress = item.customer.address.sonha + ' ' + item.customer.address.phuong+' '+item.customer.address.quan+' '+item.customer.address.thanhpho;
       return (
@@ -86,23 +86,28 @@ class Myorders extends Component {
       </div>
     );
   }
-  CheckToken_Web() {
-    const token_web = localStorage.getItem('token_web');
-    console.log(token_web); // Add this line
-    const config = { headers: { 'x-access-token': token_web } };
-    axios.get('/api/customer/customers/' + token_web, config).then((res) => {
+
+
+  GetUserToken(){
+    const token_user = localStorage.getItem('token_user');
+    const config = { headers: { 'x-access-token': token_user } };
+    axios.get('/api/customer/getusertoken/', config).then((res) => {
       const result = res.data;
-      this.context.setCustomer(result);
-      if (this.context.customer) {
-        const cid = this.context.customer._id;
-        this.apiGetOrdersByCustID(cid);
+      if (result && result.success === false) {
+        this.context.setCustomer(null);
+        this.context.setToken('');
+      } else {
+       this.context.setCustomer(result);
+        if (this.context.customer) {
+          const cid = this.context.customer._id;
+          this.apiGetOrdersByCustID(cid);
+        }
       }
-      
     });
   }
   
   componentDidMount() {
-    this.CheckToken_Web();
+    this.GetUserToken();
   }
   // event-handlers
   trItemClick(item) {
@@ -110,10 +115,11 @@ class Myorders extends Component {
   }
   // apis
   apiGetOrdersByCustID(cid) {
-    const config = { headers: { 'x-access-token': this.context.customer.token_web } };
+    const config = { headers: { 'x-access-token': this.context.token } };
     axios.get('/api/customer/orders/customer/' + cid, config).then((res) => {
       const result = res.data;
       this.setState({ orders: result });
+      console.log(result);
     });
   }
 }

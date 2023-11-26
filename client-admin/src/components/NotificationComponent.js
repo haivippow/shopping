@@ -47,14 +47,33 @@ class Notification extends Component {
   }
   componentDidMount() {
     this.apiGetNotifications();
+    this.GetAdminToken();
   }
+  GetAdminToken(){
+    const token_admin = localStorage.getItem('token_admin');
+    const config = { headers: { 'x-access-token': token_admin } };
+    axios.get('/api/admin/getadmintoken/', config).then((res) => {
+      const result = res.data;
+      if (result && result.success === false) {
+        this.context.setAdmin(null);
+        this.context.setToken('');
+      } else {
+        this.context.setToken(token_admin);
+       this.context.setAdmin(result);
+      
+      }
+    });
+
+  }
+
+  
   // event-handlers
   trItemClick(item) {
     this.setState({ itemSelected: item });
   }
   // apis
   apiGetNotifications() {
-    const config = { headers: { 'x-access-token': this.context.admin.token_web_admin } };
+    const config = { headers: { 'x-access-token': this.context.token  } };
     axios.get('/api/admin/notifications', config).then((res) => {
       const result = res.data;
       this.setState({ notifications: result });

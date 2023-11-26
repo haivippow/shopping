@@ -50,27 +50,34 @@ class Address extends Component {
     );
   }
 
-  CheckToken_Web() {
-    const token_web = localStorage.getItem('token_web');
-    const config = { headers: { 'x-access-token': token_web } };
-    axios.get('/api/customer/customers/' + token_web, config).then((res) => {
-      const result = res.data;
-        this.context.setCustomer(result);
-        if (this.context.customer) {
-            this.setState({
-            txtSonha: this.context.customer.address ? this.context.customer.address.sonha || '' : '',
-            txtPhuong: this.context.customer.address ? this.context.customer.address.phuong || '' : '',
-            txtQuan: this.context.customer.address ? this.context.customer.address.quan || '' : '',
-            txtThanhpho: this.context.customer.address ? this.context.customer.address.thanhpho || '' : '',     
-            });
-        }
-      
-    });
-  }
+
   
   componentDidMount() {
-    this.CheckToken_Web();
+    this.GetUserToken();
   
+  }
+
+  GetUserToken(){
+    const token_user = localStorage.getItem('token_user');
+    const config = { headers: { 'x-access-token': token_user } };
+    axios.get('/api/customer/getusertoken/', config).then((res) => {
+      const result = res.data;
+      if (result && result.success === false) {
+        this.context.setCustomer(null);
+        this.context.setToken('');
+      } else {
+        this.context.setToken(token_user);
+       this.context.setCustomer(result);
+       if (this.context.customer) {
+        this.setState({
+        txtSonha: this.context.customer.address ? this.context.customer.address.sonha || '' : '',
+        txtPhuong: this.context.customer.address ? this.context.customer.address.phuong || '' : '',
+        txtQuan: this.context.customer.address ? this.context.customer.address.quan || '' : '',
+        txtThanhpho: this.context.customer.address ? this.context.customer.address.thanhpho || '' : '',     
+        });
+    }
+      }
+    });
   }
 
   lnkCheckoutClick(e) {
@@ -122,7 +129,7 @@ class Address extends Component {
 
   apiCheckout(total, items, customer_addressnew) {
     const body = { total: total, items: items, customer: customer_addressnew };
-    const config = { headers: { 'x-access-token': this.context.customer.token_web } };
+    const config = { headers: { 'x-access-token': this.context.token } };
     axios.post('/api/customer/checkout', body, config).then((res) => {
       const result = res.data;
       if (result) {

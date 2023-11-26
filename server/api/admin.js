@@ -71,7 +71,8 @@ router.get('/categories', JwtUtil.checkToken, async function(req, res) {
 });
 router.post('/categories', JwtUtil.checkToken, async function(req, res) {
   const name = req.body.name;
-  const category = { name: name };
+  const size = req.body.size;
+  const category = { name: name,size:size };
   const result = await CategoryDAO.insert(category);
   res.json(result);
 });
@@ -94,9 +95,8 @@ router.post('/login', async function(req, res) {
   if (username && password) {
     const admin = await AdminDAO.selectByUsernameAndPassword(username, password);
     if (admin) {
-      const token = JwtUtil.genToken();
-      res.json({ success: true, message: 'Authentication successful', token: token ,admin:admin});
-      const resultToken_web_admin = await AdminDAO.update_token_web_admin(admin._id,token)
+      const token = JwtUtil.genToken(admin._id,admin.username);
+      res.json({ success: true, message: 'Authentication successful', token: token});
     } else {
       res.json({ success: false, message: 'Incorrect username or password' });
     }
@@ -104,6 +104,15 @@ router.post('/login', async function(req, res) {
     res.json({ success: false, message: 'Please input username and password' });
   }
 });
+
+router.get('/getadmintoken', JwtUtil.checkToken, async function(req, res) {
+  const username = req.username;
+  const id = req.id;
+  console.log(id);
+  const admins = await AdminDAO.selectByID(id);
+  res.json(admins);
+});
+
 router.get('/token', JwtUtil.checkToken, function(req, res) {
   const token = req.headers['x-access-token'] || req.headers['authorization'];
   res.json({ success: true, message: 'Token is valid', token: token });

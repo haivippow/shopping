@@ -23,7 +23,6 @@ class Main extends Component {
   render() {
     return (
         <div className="body-customer">
-        
         <Inform />
         <Menu />
         <Routes>
@@ -47,7 +46,10 @@ class Main extends Component {
         </Routes>
         <TawkMessenger />
       </div>
+
     );
+    
+      
   }
 }
 export default Main;

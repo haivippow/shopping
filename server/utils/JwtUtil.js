@@ -2,9 +2,9 @@
 const jwt = require('jsonwebtoken');
 const MyConstants = require('./MyConstants');
 const JwtUtil = {
-  genToken(username, password) {
+  genToken(id,username, password) {
     const token = jwt.sign(
-      { username: username, password: password },
+      { id,username, password },
       MyConstants.JWT_SECRET,
       { expiresIn: MyConstants.JWT_EXPIRES }
     );
@@ -20,7 +20,8 @@ const JwtUtil = {
             message: 'Token is not valid'
           });
         } else {
-          req.decoded = decoded;
+          req.username = decoded.username;
+          req.id = decoded.id;
           next();
         }
       });
@@ -30,6 +31,7 @@ const JwtUtil = {
         message: 'Token lỗi hoặc hết hạn'
       });
     }
-  }
+  },
+
 };
 module.exports = JwtUtil;

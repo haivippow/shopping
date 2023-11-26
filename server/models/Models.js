@@ -12,12 +12,12 @@ const AdminSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   username: String,
   password: String,
-  token_web_admin: String,
 }, { versionKey: false });
 
 const CategorySchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  name: String
+  name: String,
+  size: String,
 }, { versionKey: false });
 
 const NotificationSchema = mongoose.Schema({
@@ -35,7 +35,6 @@ const CustomerSchema = mongoose.Schema({
   active: Number,
   token: String,
   resetToken: String,
-  token_web: String,
   address: addressSchema, // Use addressSchema here
 }, { versionKey: false });
 

@@ -100,13 +100,19 @@ class Myprofile extends Component {
   }
 
 
-  CheckToken_Web() {
-    const token_web = localStorage.getItem('token_web');
-    const config = { headers: { 'x-access-token': token_web } };
-    axios.get('/api/customer/customers/' + token_web, config).then((res) => {
+  GetUserToken(){
+    const token_user = localStorage.getItem('token_user');
+    const config = { headers: { 'x-access-token': token_user } };
+    axios.get('/api/customer/getusertoken/', config).then((res) => {
       const result = res.data;
-      this.context.setCustomer(result);
-      if (this.context.customer) {
+      if(result && result.success===false){
+        this.context.setCustomer(null);
+        this.context.setToken('');
+     }
+     else{
+       this.context.setToken(token_user);
+       this.context.setCustomer(result);
+       if (this.context.customer) {
         this.setState({
           txtUsername: this.context.customer.username,
           txtPassword: this.context.customer.password,
@@ -121,15 +127,16 @@ class Myprofile extends Component {
           
         });
       }
-
-      
+     }
     });
   }
 
+
   componentDidMount() {
-    this.CheckToken_Web();
-  
+    this.GetUserToken();
+
   }
+  
 
   // event-handlers
   btnUpdateClick(e) {
@@ -165,7 +172,7 @@ class Myprofile extends Component {
 
   // apis
   apiPutCustomer(id, customer) {
-    const config = { headers: { 'x-access-token': this.context.customer.token_web} };
+    const config = { headers: { 'x-access-token': this.context.token} };
     axios.put('/api/customer/customers/' + id, customer, config).then((res) => {
       const result = res.data;
       if (result) {
@@ -178,7 +185,7 @@ class Myprofile extends Component {
   }
 
   apiPutAddress(id, address) {
-    const config = { headers: { 'x-access-token': this.context.customer.token_web } };
+    const config = { headers: { 'x-access-token': this.context.token } };
     axios.put('/api/customer/address/' + id, address, config).then((res) => {
       const result = res.data;
       if (result) {

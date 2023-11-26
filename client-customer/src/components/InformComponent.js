@@ -92,22 +92,6 @@ class Inform extends Component {
       document.documentElement.setAttribute('data-bs-theme', 'light');
     }
   }
-
-  CheckToken_Web() {
-    const token_web = localStorage.getItem('token_web');
-    console.log("token_web:",token_web); 
-    const config = { headers: { 'x-access-token': token_web } };
-    axios.get('/api/customer/customers/' + token_web, config).then((res) => {
-      const result = res.data;
-      // if(result.success=="false"){
-      //   this.context.customer=null;
-      // }else{
-      //   this.context.setCustomer(result);
-      // }
-      this.context.setCustomer(result);
-    
-    });
-  }
   
 
   selectNotification = (notification) => {
@@ -116,7 +100,7 @@ class Inform extends Component {
   };
 
   componentDidMount() {
-    this.CheckToken_Web();
+    this.GetUserToken();
     this.apiGetNotifications();
     // Bắt đầu nhấp nháy khi component được mount
     this.blinkInterval = setInterval(() => {
@@ -124,6 +108,21 @@ class Inform extends Component {
         notificationBlink: !prevState.notificationBlink,
       }));
     }, 1000); // 1 giây
+  }
+
+  GetUserToken(){
+    const token_user = localStorage.getItem('token_user');
+    const config = { headers: { 'x-access-token': token_user } };
+    axios.get('/api/customer/getusertoken/', config).then((res) => {
+      const result = res.data;
+      if (result && result.success === false) {
+        this.context.setCustomer(null);
+        this.context.setToken('');
+      } else {
+        this.context.setToken(token_user);
+       this.context.setCustomer(result);
+      }
+    });
   }
 
   componentWillUnmount() {
@@ -143,7 +142,7 @@ class Inform extends Component {
     this.context.setToken('');
     this.context.setCustomer(null);
     this.context.setMycart([]);
-    localStorage.removeItem('token_web');
+    localStorage.removeItem('token_user');
   }
 
   toggleLinks(show) {

@@ -8,7 +8,8 @@ class CategoryDetail extends Component {
     super(props);
     this.state = {
       txtID: '',
-      txtName: ''
+      txtName: '',
+      selectedSize:"1"
     };
   }
   render() {
@@ -27,6 +28,15 @@ class CategoryDetail extends Component {
                 <td><input type="text" value={this.state.txtName} onChange={(e) => { this.setState({ txtName: e.target.value }) }} /></td>
               </tr>
               <tr>
+                  <td align="right">Size</td>
+                  <td>
+                    <select value={this.state.selectedSize} onChange={(e) => this.handleSizeChange(e)}>
+                      <option value="1">Có Size</option>
+                      <option value="0">Không Size</option>
+                    </select>
+                  </td>
+                </tr>
+              <tr>
                 <td></td>
                 <td>
                 <input type="submit" value="ADD NEW" onClick={(e) => this.btnAddClick(e)} />
@@ -43,6 +53,33 @@ class CategoryDetail extends Component {
       </div>
     );
   }
+
+
+  GetAdminToken(){
+    const token_admin = localStorage.getItem('token_admin');
+    const config = { headers: { 'x-access-token': token_admin } };
+    axios.get('/api/admin/getadmintoken/', config).then((res) => {
+      const result = res.data;
+      if (result && result.success === false) {
+        this.context.setAdmin(null);
+        this.context.setToken('');
+      } else {
+        this.context.setToken(token_admin);
+       this.context.setAdmin(result);
+      
+      }
+    });
+
+  }
+  componentDidMount() {
+    this.GetAdminToken();
+  }
+  
+  handleSizeChange = (e) => {
+    this.setState({ selectedSize: e.target.value });
+  };
+
+
    // event-handlers
    btnUpdateClick(e) {
     e.preventDefault();
@@ -57,7 +94,7 @@ class CategoryDetail extends Component {
   }
   // apis
   apiPutCategory(id, cate) {
-    const config = { headers: { 'x-access-token': this.context.admin.token_web_admin} };
+    const config = { headers: { 'x-access-token': this.context.token } };
     axios.put('/api/admin/categories/' + id, cate, config).then((res) => {
       const result = res.data;
       if (result) {
@@ -82,7 +119,7 @@ class CategoryDetail extends Component {
   }
   // apis
   apiDeleteCategory(id) {
-    const config = { headers: { 'x-access-token': this.context.admin.token_web_admin } };
+    const config = { headers: { 'x-access-token': this.context.token  } };
     axios.delete('/api/admin/categories/' + id, config).then((res) => {
       const result = res.data;
       if (result) {
@@ -96,8 +133,10 @@ class CategoryDetail extends Component {
   btnAddClick(e) {
     e.preventDefault();
     const name = this.state.txtName;
-    if (name) {
-      const cate = { name: name };
+    const size = this.state.selectedSize;
+    if (name && size) {
+      const cate = { name: name ,size:size};
+      console.log(cate);
       this.apiPostCategory(cate);
     } else {
       alert('Please input name');
@@ -105,7 +144,7 @@ class CategoryDetail extends Component {
   }
   // apis
   apiPostCategory(cate) {
-    const config = { headers: { 'x-access-token': this.context.admin.token_web_admin } };
+    const config = { headers: { 'x-access-token': this.context.token } };
     axios.post('/api/admin/categories', cate, config).then((res) => {
       const result = res.data;
       if (result) {
@@ -119,7 +158,7 @@ class CategoryDetail extends Component {
 
 
   apiGetCategories() {
-    const config = { headers: { 'x-access-token': this.context.admin.token_web_admin } };
+    const config = { headers: { 'x-access-token': this.context.token  } };
     axios.get('/api/admin/categories', config).then((res) => {
       const result = res.data;
       this.props.updateCategories(result);

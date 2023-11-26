@@ -18,6 +18,7 @@ class Category extends Component {
         <tr key={item._id} className="datatable" onClick={() => this.trItemClick(item)}>
           <td>{item._id}</td>
           <td>{item.name}</td>
+          <td>{item.size}</td>
         </tr>
       );
     });
@@ -30,6 +31,7 @@ class Category extends Component {
               <tr className="datatable">
                 <th>ID</th>
                 <th>Name</th>
+                <th>Size</th>
               </tr>
               {cates}
             </tbody>
@@ -45,6 +47,7 @@ class Category extends Component {
     this.setState({ categories: categories });
   }
   componentDidMount() {
+    this.GetAdminToken();
     this.apiGetCategories();
   }
   // event-handlers
@@ -53,11 +56,28 @@ class Category extends Component {
   }
   // apis
   apiGetCategories() {
-    const config = { headers: { 'x-access-token': this.context.admin.token_web_admin } };
+    const config = { headers: { 'x-access-token': this.context.token  } };
     axios.get('/api/admin/categories', config).then((res) => {
       const result = res.data;
       this.setState({ categories: result });
     });
   }
+  GetAdminToken(){
+    const token_admin = localStorage.getItem('token_admin');
+    const config = { headers: { 'x-access-token': token_admin } };
+    axios.get('/api/admin/getadmintoken/', config).then((res) => {
+      const result = res.data;
+      if (result && result.success === false) {
+        this.context.setAdmin(null);
+        this.context.setToken('');
+      } else {
+        this.context.setToken(token_admin);
+       this.context.setAdmin(result);
+      }
+
+    });
+
+  }
+
 }
 export default Category;

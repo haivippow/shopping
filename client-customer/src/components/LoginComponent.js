@@ -44,13 +44,28 @@ class Login extends Component {
     );
   }
 
+  componentDidMount() {
+    this.GetUserToken();
+  }
 
+  GetUserToken(){
+    const token_user = localStorage.getItem('token_user');
+    const config = { headers: { 'x-access-token': token_user } };
+    axios.get('/api/customer/getusertoken/', config).then((res) => {
+      const result = res.data;
+      if (result && result.success === false) {
+        this.context.setCustomer(null);
+        this.context.setToken('');
+      } else {
+        this.context.setToken(token_user);
+       this.context.setCustomer(result);
+       this.props.navigate('/home');
+      }
+    });
+  }
 
   btnResetPasswordClick(e) {
     e.preventDefault();
-    // Add logic to handle the reset password action
-    // You can navigate to the reset password page or show a modal, etc.
-    // For example:
     this.props.navigate('/reset-password');
   }
   // event-handlers
@@ -71,7 +86,7 @@ class Login extends Component {
       const result = res.data;
       if (result.success === true) {
         this.context.setToken(result.token);
-       localStorage.setItem("token_web",result.token);
+       localStorage.setItem("token_user",result.token);
         this.context.setCustomer(result.customer);
         this.props.navigate('/home');
       } else {

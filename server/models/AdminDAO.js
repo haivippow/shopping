@@ -7,15 +7,9 @@ const AdminDAO = {
     const admin = await Models.Admin.findOne(query);
     return admin;
   },
-  async select_token_web_admin(token_web_admin) {
-    const query = { $or: [ { token_web_admin: token_web_admin }] };
-    const admin = await Models.Admin.findOne(query);
+  async selectByID(_id) {
+    const admin = await Models.Admin.findById(_id).exec();
     return admin;
-  },
-  async update_token_web_admin(adminId,token_web_admin) {
-    const newvalues = { token_web_admin: token_web_admin };
-    const result = await Models.Admin.findByIdAndUpdate(adminId, newvalues, { new: true });
-    return result;
   },
 };
 module.exports = AdminDAO;

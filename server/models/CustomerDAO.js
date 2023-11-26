@@ -73,7 +73,7 @@ const CustomerDAO = {
     const customer = await Models.Customer.findOne(query);
     return customer;
   },
-  async  updatePasswordWithEmailAndToken(email, token, newPassword) {
+  async  updatePasswordWithEmailAndToken(email, resetToken, newPassword) {
     try {
       const customer = await Models.Customer.findOne({ email, resetToken: token });
       

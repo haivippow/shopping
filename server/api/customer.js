@@ -84,9 +84,10 @@ router.post('/login', async function (req, res) {
     const customer = await CustomerDAO.selectByUsernameAndPassword(username, password);
     if (customer) {
       if (customer.active === 1) {
-        const token = JwtUtil.genToken();
-        res.json({ success: true, message: 'Authentication successful', token: token, customer: customer });
-        const resultToken_web = await CustomerDAO.update_token_web(customer._id,token)
+        const id = customer._id;
+        const token = JwtUtil.genToken(id,username);
+        res.json({ success: true, message: 'Authentication successful', token: token});
+     
       } else {
         res.json({ success: false, message: 'Account is deactive' });
       }
@@ -99,9 +100,17 @@ router.post('/login', async function (req, res) {
 });
 
 
-router.get('/customers/:token_web', JwtUtil.checkToken, async function(req, res) {
-  const token_web = req.params.token_web;
-  const customers = await CustomerDAO.select_token_web(token_web);
+// router.get('/customers/:token_web', JwtUtil.checkToken, async function(req, res) {
+//   const token_web = req.params.token_web;
+//   const customers = await CustomerDAO.select_token_web(token_web);
+//   res.json(customers);
+// });
+
+
+router.get('/getusertoken', JwtUtil.checkToken, async function(req, res) {
+  const username = req.username;
+  const id = req.id;
+  const customers = await CustomerDAO.selectByID(id);
   res.json(customers);
 });
 
@@ -196,10 +205,10 @@ router.post('/reset-password', async function (req, res) {
 });
 router.post('/comfirm', async function (req, res) {
   const email = req.body.email;
-  const token = req.body.token;
+  const resetToken = req.body.resetToken;
   const password = req.body.password; // Assuming the new password is sent in the request
 
-  const result = await CustomerDAO.updatePasswordWithEmailAndToken(email, token, password);
+  const result = await CustomerDAO.updatePasswordWithEmailAndToken(email, resetToken, password);
   res.json(result);
   console.log('', result); // Log the result
 
@@ -212,10 +221,6 @@ router.get('/productfavorites', async function (req, res) {
   res.json(productfavorites);
 });
 
-// router.get('/productfavorites', JwtUtil.checkToken, async function (req, res) {
-//   const productfavorites = await ProductFavoriteDAO.selectAll();
-//   res.json(productfavorites);
-// });
 router.post('/productfavorites', JwtUtil.checkToken, async function (req, res) {
   
   const now = new Date().getTime(); // milliseconds

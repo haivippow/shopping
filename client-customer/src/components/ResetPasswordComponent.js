@@ -68,10 +68,10 @@ class ResetPW extends Component {
   btnConfirmClick(e) {
     e.preventDefault();
     const email = this.state.txtEmail;
-    const token = this.state.txtToken;
+    const resetToken = this.state.txtToken;
     const password = this.state.txtPassword;
-    if (email && token && password) {
-      const account = { email: email, token: token, password: password };
+    if (email && resetToken && password) {
+      const account = { email: email, resetToken: resetToken, password: password };
       this.apiConfirm(account);
     } else {
       alert('Please input email and token and password');

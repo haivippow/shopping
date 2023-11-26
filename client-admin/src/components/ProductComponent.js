@@ -82,7 +82,25 @@ class Product extends Component {
     this.setState({ products: products, noPages: noPages, curPage: curPage });
   }
   componentDidMount() {
+    this.GetAdminToken();
     this.apiGetProducts(this.state.curPage);
+  }
+
+  GetAdminToken(){
+    const token_admin = localStorage.getItem('token_admin');
+    const config = { headers: { 'x-access-token': token_admin } };
+    axios.get('/api/admin/getadmintoken/', config).then((res) => {
+      const result = res.data;
+      if (result && result.success === false) {
+        this.context.setAdmin(null);
+        this.context.setToken('');
+      } else {
+        this.context.setToken(token_admin);
+       this.context.setAdmin(result);
+      
+      }
+    });
+
   }
   // event-handlers
   lnkPageClick(index) {
@@ -93,7 +111,7 @@ class Product extends Component {
   }
   // apis
   apiGetProducts(page) {
-    const config = { headers: { 'x-access-token': this.context.admin.token_web_admin } };
+    const config = { headers: { 'x-access-token': this.context.token  } };
     axios.get('/api/admin/products?page=' + page, config).then((res) => {
       const result = res.data;
       this.setState({ products: result.products, noPages: result.noPages, curPage: result.curPage });

@@ -54,19 +54,24 @@ class Login extends Component {
 
 
 
-  CheckToken_Web() {
-    const token_web_admin = localStorage.getItem('token_web_admin');
-    const config = { headers: { 'x-access-token': token_web_admin } };
-    axios.get('/api/admin/admins/' + token_web_admin,config).then((res) => {
+  GetAdminToken(){
+    const token_admin = localStorage.getItem('token_admin');
+    const config = { headers: { 'x-access-token': token_admin } };
+    axios.get('/api/admin/getadmintoken/', config).then((res) => {
       const result = res.data;
-      if(result){
-        this.context.setAdmin(result);
+      if (result && result.success === false) {
+        this.context.setAdmin(null);
+        this.context.setToken('');
+      } else {
+        this.context.setToken(token_admin);
+       this.context.setAdmin(result);
+      
       }
-
     });
+
   }
   componentDidMount() {
-    this.CheckToken_Web();
+    this.GetAdminToken();
   }
 
   // apis
@@ -75,7 +80,7 @@ class Login extends Component {
       const result = res.data;
       if (result.success === true) {
         this.context.setAdmin(result.admin);
-        localStorage.setItem("token_web_admin",result.token);
+        localStorage.setItem("token_admin",result.token);
         this.context.setToken(result.token);
         this.context.setUsername(account.username);
       } else {

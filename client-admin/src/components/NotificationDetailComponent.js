@@ -43,6 +43,28 @@ class NotificationDetail extends Component {
       </div>
     );
   }
+
+
+
+  GetAdminToken(){
+    const token_admin = localStorage.getItem('token_admin');
+    const config = { headers: { 'x-access-token': token_admin } };
+    axios.get('/api/admin/getadmintoken/', config).then((res) => {
+      const result = res.data;
+      if (result && result.success === false) {
+        this.context.setAdmin(null);
+        this.context.setToken('');
+      } else {
+        this.context.setToken(token_admin);
+       this.context.setAdmin(result);
+      
+      }
+    });
+
+  }
+  componentDidMount() {
+    this.GetAdminToken();
+  }
    // event-handlers
    btnUpdateClick(e) {
     e.preventDefault();
@@ -57,7 +79,7 @@ class NotificationDetail extends Component {
   }
   // apis
   apiPutNotification(id, cate) {
-    const config = { headers: { 'x-access-token': this.context.admin.token_web_admin } };
+    const config = { headers: { 'x-access-token': this.context.token } };
     axios.put('/api/admin/notifications/' + id, cate, config).then((res) => {
       const result = res.data;
       if (result) {
@@ -82,7 +104,7 @@ class NotificationDetail extends Component {
   }
   // apis
   apiDeleteNotification(id) {
-    const config = { headers: { 'x-access-token': this.context.admin.token_web_admin } };
+    const config = { headers: { 'x-access-token': this.context.token  } };
     axios.delete('/api/admin/notifications/' + id, config).then((res) => {
       const result = res.data;
       if (result) {
@@ -105,7 +127,7 @@ class NotificationDetail extends Component {
   }
   // apis
   apiPostNotification(cate) {
-    const config = { headers: { 'x-access-token': this.context.admin.token_web_admin } };
+    const config = { headers: { 'x-access-token': this.context.token } };
     axios.post('/api/admin/notifications', cate, config).then((res) => {
       const result = res.data;
       if (result) {
@@ -117,7 +139,7 @@ class NotificationDetail extends Component {
     });
   }
   apiGetNotifications() {
-    const config = { headers: { 'x-access-token': this.context.admin.token_web_admin } };
+    const config = { headers: { 'x-access-token': this.context.token  } };
     axios.get('/api/admin/notifications', config).then((res) => {
       const result = res.data;
       this.props.updateNotifications(result);

@@ -30,7 +30,7 @@ class Menu extends Component {
   lnkLogoutClick() {
     this.context.setToken('');
     this.context.setUsername('');
-    localStorage.removeItem('token_web_admin');
+    localStorage.removeItem('token_admin');
     this.context.setAdmin(null);
   }
 }

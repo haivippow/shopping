@@ -81,7 +81,26 @@ class ProductDetail extends Component {
       </div>
     );
   }
+
+
+  GetAdminToken(){
+    const token_admin = localStorage.getItem('token_admin');
+    const config = { headers: { 'x-access-token': token_admin } };
+    axios.get('/api/admin/getadmintoken/', config).then((res) => {
+      const result = res.data;
+      if (result && result.success === false) {
+        this.context.setAdmin(null);
+        this.context.setToken('');
+      } else {
+        this.context.setToken(token_admin);
+       this.context.setAdmin(result);
+      
+      }
+    });
+
+  }
   componentDidMount() {
+    this.GetAdminToken();
     this.apiGetCategories();
   }
   componentDidUpdate(prevProps) {
@@ -117,7 +136,7 @@ class ProductDetail extends Component {
   }
   // apis
   apiDeleteProduct(id) {
-    const config = { headers: { 'x-access-token': this.context.admin.token_web_admin } };
+    const config = { headers: { 'x-access-token': this.context.token  } };
     axios.delete('/api/admin/products/' + id, config).then((res) => {
       const result = res.data;
       if (result) {
@@ -151,7 +170,7 @@ class ProductDetail extends Component {
   }
   // apis
   apiPutProduct(id, prod) {
-    const config = { headers: { 'x-access-token': this.context.admin.token_web_admin } };
+    const config = { headers: { 'x-access-token': this.context.token  } };
     axios.put('/api/admin/products/' + id, prod, config).then((res) => {
       const result = res.data;
       if (result) {
@@ -179,7 +198,7 @@ class ProductDetail extends Component {
   
   // apis
   apiPostProduct(prod) {
-    const config = { headers: { 'x-access-token': this.context.admin.token_web_admin} };
+    const config = { headers: { 'x-access-token': this.context.token } };
     axios.post('/api/admin/products', prod, config).then((res) => {
       const result = res.data;
       if (result) {
@@ -191,7 +210,7 @@ class ProductDetail extends Component {
     });
   }
   apiGetProducts() {
-    const config = { headers: { 'x-access-token': this.context.admin.token_web_admin } };
+    const config = { headers: { 'x-access-token': this.context.token } };
     axios.get('/api/admin/products?page=' + this.props.curPage, config).then((res) => {
       const result = res.data;   
   if (result.products.length !== 0) {
@@ -251,7 +270,7 @@ class ProductDetail extends Component {
 
   // apis
   apiGetCategories() {
-    const config = { headers: { 'x-access-token': this.context.admin.token_web_admin} };
+    const config = { headers: { 'x-access-token': this.context.token } };
     axios.get('/api/admin/categories', config).then((res) => {
       const result = res.data;
       this.setState({ categories: result });

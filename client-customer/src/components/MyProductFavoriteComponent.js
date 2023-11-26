@@ -61,6 +61,15 @@ class MyProductFavorite extends Component {
     );
   }
 
+  
+  componentDidMount() {
+    this.GetUserToken();
+    if (this.context.customer) {
+      const cid = this.context.customer._id;
+      this.apiGetProductFavoritesByCustID(cid);
+    }
+  }
+
   formatDate(timestamp) {
     const date = new Date(timestamp);
     return date.toLocaleDateString(); 
@@ -71,7 +80,7 @@ class MyProductFavorite extends Component {
   }
 
   apiDeleteProductFavorite(id) {
-    const config = { headers: { 'x-access-token': this.context.token } };
+    const config = { headers: { 'x-access-token': this.context.token} };
     axios.delete('/api/customer/productfavorites/'+id, config).then((res) => {
       const result = res.data;
       if (result) {
@@ -95,30 +104,28 @@ class MyProductFavorite extends Component {
     this.setState({ productfavorites });
   };
 
-  CheckToken_Web() {
-    const token_web = localStorage.getItem('token_web');
-    console.log(token_web); // Add this line
-    const config = { headers: { 'x-access-token': token_web } };
-    axios.get('/api/customer/customers/' + token_web, config).then((res) => {
+
+  GetUserToken(){
+    const token_user = localStorage.getItem('token_user');
+    const config = { headers: { 'x-access-token': token_user } };
+    axios.get('/api/customer/getusertoken/', config).then((res) => {
       const result = res.data;
-      this.context.setCustomer(result);
-      if (this.context.customer) {
-        const cid = this.context.customer._id;
-        this.apiGetProductFavoritesByCustID(cid);
+      if(result && result.success===false){
+         this.context.setCustomer(null);
+         this.context.setToken('');
       }
-      
+      else{
+        this.context.setToken(token_user);
+        this.context.setCustomer(result);
+      }
+          
     });
   }
   
 
 
-  componentDidMount() {
-    this.CheckToken_Web();
-    
-  }
-
   apiGetProductFavoritesByCustID(cid) {
-    const config = { headers: { 'x-access-token': this.context.customer.token_web} };
+    const config = { headers: { 'x-access-token': this.context.token} };
     axios.get(`/api/customer/productfavorites/customer/${cid}`, config).then((res) => {
       const result = res.data;
       this.updateProductFavorites(result);

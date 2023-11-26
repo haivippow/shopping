@@ -6,7 +6,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Category from './CategoryComponent';
 import Notification from './NotificationComponent';
 import Product from './ProductComponent';
-import Order from './OrderComponent';
+import Order from './OrderComponent'; 
 import Customer from './CustomerComponent';
 
 
