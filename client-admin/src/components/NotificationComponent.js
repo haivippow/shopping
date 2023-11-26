@@ -24,7 +24,7 @@ class Notification extends Component {
     return (
       <div>
         <div className="float-left">
-          <h2 className="text-center">NOTIFICATION LIST</h2>
+          <h2 className="text-center">DANH SÁCH THÔNG BÁO</h2>
           <table className="datatable" border="1">
             <tbody>
               <tr className="datatable">

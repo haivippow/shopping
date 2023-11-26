@@ -26,8 +26,8 @@ class Product extends Component {
           <td>{item.category.name}</td>
           <td><img src={"data:image/jpg;base64," + item.image} width="100px" height="100px" alt="" /></td>
           <td>
-        {item.imageChitiet && item.imageChitiet.length > 0 ? (
-          item.imageChitiet.map((image, index) => (
+        {item.imageDetail && item.imageDetail.length > 0 ? (
+          item.imageDetail.map((image, index) => (
             <img
               key={index}
               src={"data:image/jpg;base64,"+image}
@@ -53,7 +53,7 @@ class Product extends Component {
     return (
       <div>
         <div className="float-left">
-          <h2 className="text-center">Chi Tiết Sản Phẩm</h2>
+          <h2 className="text-center">DANH SÁCH SẢN PHẨM</h2>
           <table className="datatable" border="1">
             <tbody>
               <tr className="datatable">

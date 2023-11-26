@@ -49,7 +49,6 @@ router.post('/signup', async function (req, res) {
   const phone = req.body.phone;
   const email = req.body.email;
   const resetToken = null;
-  const token_web = null;
   const address =null;
   const dbCust = await CustomerDAO.selectByUsernameOrEmail(username, email);
   if (dbCust) {
@@ -57,7 +56,7 @@ router.post('/signup', async function (req, res) {
   } else {
     const now = new Date().getTime(); // milliseconds
     const token = CryptoUtil.md5(now.toString());
-    const newCust = { username: username, password: password, name: name, phone: phone, email: email, active: 0, token: token,resetToken:resetToken,token_web,address:address };
+    const newCust = { username: username, password: password, name: name, phone: phone, email: email, active: 0, token: token,resetToken:resetToken,address:address };
     const result = await CustomerDAO.insert(newCust);
     if (result) {
       const send = await EmailUtil.send(email, result._id, token);
@@ -175,6 +174,18 @@ const NotificationDAO = require('../models/NotificationDAO');
 router.get('/notifications', async function (req, res) {
   const notifications = await NotificationDAO.selectAll();
   res.json(notifications);
+});
+const SizeDao = require('../models/SizeDAO');
+router.get('/sizes', async function (req, res) {
+  const sizes = await SizeDao.selectAll();
+  res.json(sizes);
+});
+
+
+const ContactDAO = require('../models/ContactDAO');
+router.get('/contacts', async function (req, res) {
+  const contacts = await ContactDAO.selectAll();
+  res.json(contacts);
 });
 
 // ----------------------------------

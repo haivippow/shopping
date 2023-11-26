@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 import withRouter from '../utils/withRouter';
+import { toast } from 'react-toastify';
+
 class Signup extends Component {
   constructor(props) {
     super(props);
@@ -76,14 +78,14 @@ class Signup extends Component {
       const account = { username: username, password: password, name: name, phone: phone, email: email };
       this.apiSignup(account);
     } else {
-      alert('Please input username and password and name and phone and email');
+      toast.info('Vui Lòng Nhập Đầy Đủ Thông Tin')
     }
   }
   // apis
   apiSignup(account) {
     axios.post('/api/customer/signup', account).then((res) => {
       const result = res.data;
-      alert(result.message);
+      toast.success(result.message);
       this.props.navigate('/active');
 
     });

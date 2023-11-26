@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import Slider from './SliderComponent'
 
 
 class Home extends Component {
@@ -17,7 +18,7 @@ class Home extends Component {
         <div key={item._id} className="inline">
           <figure>
           <Link to={'/product/' + item._id}><img src={"data:image/jpg;base64," + item.image} width="300px" height="300px" alt="" /></Link>
-            <figcaption className="text-center">Tên Sản Phẩm: {item.name}<br />Giá: {item.price}</figcaption>
+            <figcaption className="text-center">Tên Sản Phẩm: {item.name}<br />Giá: {(item.price).toLocaleString('vi-VN')} VNĐ</figcaption>
           </figure>
         </div>
       );
@@ -28,7 +29,7 @@ class Home extends Component {
           <figure>
             
           <Link to={'/product/' + item._id}><img src={"data:image/jpg;base64," + item.image} width="300px" height="300px" alt="" /></Link>
-            <figcaption className="text-center">Tên sản phẩm: {item.name}<br />Giá: {item.price}</figcaption>
+            <figcaption className="text-center">Tên sản phẩm: {item.name}<br />Giá: {(item.price).toLocaleString('vi-VN')} VNĐ</figcaption>
           </figure>
         </div>
         
@@ -36,7 +37,9 @@ class Home extends Component {
     });
     return (
       <div>
+        <Slider/>
         <div className="align-center">
+       
           <h2 className="text-center">SẢN PHẨM MỚI NHẤT</h2>
           {newprods}
         </div>

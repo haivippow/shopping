@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import withRouter from '../utils/withRouter';
 import MyContext from '../contexts/MyContext';
 import CartUtil from '../utils/CartUtil';
+import { toast } from 'react-toastify';
 
 class Address extends Component {
     static contextType = MyContext; // using this.context to access global state
@@ -88,44 +89,45 @@ class Address extends Component {
         const quan = this.state.txtQuan;
         const thanhpho =this.state.txtThanhpho;
         if (window.confirm(
-                "Địa chỉ nhận hàng:\n" +
-                "Số nhà/Đường: "+sonha+'\n'+
-                "Phường/Xã: "+phuong+'\n'+
-                "Quận/Huyện "+quan+'\n'+
-                "Thành Phố: "+thanhpho+'\n' +
-                "Bạn đồng ý chứ...\nNếu không, Hãy cập nhập địa chỉ nhận hàng ở My Profile"
-              )){
-
-              }
-            const addressnew={
-                sonha:sonha,
-                phuong:phuong,
-                quan:quan,
-                thanhpho:thanhpho
-            };
-            const customer_addressnew = {
-                _id: customer._id,
-                username: customer.username,
-                name: customer.name,
-                phone: customer.phone,
-                email: customer.email,
-                address: addressnew,
-              }
-       
-            if (this.context.mycart.length > 0) { 
-                const total = CartUtil.getTotal(this.context.mycart);
-                const items = this.context.mycart;
-              
-                if (customer) {
-                    this.apiCheckout(total, items, customer_addressnew);
-                } else {
-                        this.props.navigate('/login');
-                }
-                } else {
-                      alert('Your cart is empty');
-            } 
-                    
-      }
+          "Địa chỉ nhận hàng:\n" +
+          "Số nhà/Đường: " + sonha + '\n' +
+          "Phường/Xã: " + phuong + '\n' +
+          "Quận/Huyện " + quan + '\n' +
+          "Thành Phố: " + thanhpho + '\n' +
+          "Bạn đồng ý chứ...\nNếu không, Hãy cập nhập địa chỉ nhận hàng ở Thông Tin Khách Hàng"
+      )) {
+        const addressnew = {
+            sonha: sonha,
+            phuong: phuong,
+            quan: quan,
+            thanhpho: thanhpho
+        };
+        const customer_addressnew = {
+            _id: customer._id,
+            username: customer.username,
+            name: customer.name,
+            phone: customer.phone,
+            email: customer.email,
+            address: addressnew,
+        }
+    
+        if (this.context.mycart.length > 0) {
+            const total = CartUtil.getTotal(this.context.mycart);
+            const items = this.context.mycart;
+    
+            if (customer) {
+                this.apiCheckout(total, items, customer_addressnew);
+            } else {
+                this.props.navigate('/login');
+            }
+        } else {
+            toast.warning("Không có sản phẩm trong Giỏ hàng");
+        }
+    } else {
+        // Người dùng chọn "No", không thêm gì cả
+        // Bạn có thể xử lý theo ý của mình ở đây
+    }                 
+  }
 
   apiCheckout(total, items, customer_addressnew) {
     const body = { total: total, items: items, customer: customer_addressnew };
@@ -133,11 +135,11 @@ class Address extends Component {
     axios.post('/api/customer/checkout', body, config).then((res) => {
       const result = res.data;
       if (result) {
-        alert('OK BABY!');
+        toast.success("Đặt Hàng Thành Công")
         this.context.setMycart([]);
         this.props.navigate('/myorders');
       } else {
-        alert('SORRY BABY!');
+        toast.error("Đặt Hàng Không Thành Công")
       }
     });
   }

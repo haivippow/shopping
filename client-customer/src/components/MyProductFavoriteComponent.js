@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Navigate } from 'react-router-dom';
 import MyContext from '../contexts/MyContext';
 import withRouter from '../utils/withRouter';
+import { toast } from 'react-toastify';
 
 class MyProductFavorite extends Component {
   static contextType = MyContext; // using this.context to access global state
@@ -21,11 +22,10 @@ class MyProductFavorite extends Component {
       <React.Fragment key={items._id}>
         <tr className="datatable">
           <td>{index + 1}</td>
-          <td>{items.product._id}</td>
-    
+          {/* <td>{items.product._id}</td> */}
           <td>{this.formatDate(items.product.cdate)}</td>
           <td>{items.product.name}</td>
-          <td>{items.product.price}</td>
+          <td>{(items.product.price).toLocaleString('vi-VN')} VNĐ</td>
           <td>
             <img src={`data:image/jpg;base64,${items.product.image}`} width="150px" height="150px" alt="" />
           </td>
@@ -46,7 +46,7 @@ class MyProductFavorite extends Component {
             <tbody>
               <tr className="datatable">
                 <th>STT</th>
-                <th>ID</th>
+                {/* <th>ID</th> */}
                 <th>Ngày Thêm</th>
                 <th>Tên</th>
                 <th>Giá</th>
@@ -84,10 +84,10 @@ class MyProductFavorite extends Component {
     axios.delete('/api/customer/productfavorites/'+id, config).then((res) => {
       const result = res.data;
       if (result) {
-        alert('OK BABY!');
+        toast.success("Xoá Thành Công");
         this.apiGetProductFavorites();
       } else {
-        alert('SORRY BABY!');
+        toast.error("Xoá Không Thành Công");
       }
     });
   }

@@ -37,8 +37,8 @@ class Inform extends Component {
                   Xin Chào <b>{this.context.customer.name} </b> |
                 </div>
                 {this.state.showLinks && (
-                  <div className="profile-links">
-                    <Link to='/myprofile'>Thông Tin Cá Nhân</Link>
+                  <div className="profile-links" style={{width:'200px'}}>
+                    <Link to='/myprofile'>Thông Tin Khách Hàng</Link>
                     <Link to='/myorders'>Đơn Hàng Đã Đặt</Link>
                     <Link to='/myproductfavorite'>Sản Phẩm Yêu Thích</Link>
                     <Link to='/home' onClick={() => this.lnkLogoutClick()}>Đăng Xuất</Link>

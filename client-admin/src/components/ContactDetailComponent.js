@@ -3,19 +3,20 @@ import React, { Component } from 'react';
 import MyContext from '../contexts/MyContext';
 import { toast } from 'react-toastify';
 
-class NotificationDetail extends Component {
+class ContactDetail extends Component {
   static contextType = MyContext; // using this.context to access global state
   constructor(props) {
     super(props);
     this.state = {
       txtID: '',
-      txtName: ''
+      txtName: '',
+      txtNoidung: '',
     };
   }
   render() {
     return (
       <div className="float-right">
-        <h2 className="text-center">Thêm Thông Báo</h2>
+        <h2 className="text-center">Thêm Liên Hệ</h2>
         <form>
           <table>
             <tbody>
@@ -24,8 +25,12 @@ class NotificationDetail extends Component {
                 <td><input type="text" value={this.state.txtID} onChange={(e) => { this.setState({ txtID: e.target.value }) }} readOnly={true} /></td>
               </tr>
               <tr>
-                <td>Name</td>
+                <td>Title</td>
                 <td><input type="text" value={this.state.txtName} onChange={(e) => { this.setState({ txtName: e.target.value }) }} /></td>
+              </tr>
+              <tr>
+                <td>Nội Dung</td>
+                <td><input type="text" value={this.state.txtNoidung} onChange={(e) => { this.setState({ txtNoidung: e.target.value }) }}/></td>
               </tr>
               <tr>
                 <td></td>
@@ -71,21 +76,22 @@ class NotificationDetail extends Component {
     e.preventDefault();
     const id = this.state.txtID;
     const name = this.state.txtName;
-    if (id && name) {
-      const cate = { name: name };
-      this.apiPutNotification(id, cate);
+    const noidung = this.state.txtNoidung;
+    if (id && name &&noidung) {
+      const cate = { name: name,noidung:noidung };
+      this.apiPutContacts(id, cate);
     } else {
       toast.info("Vui Lòng Nhập Đầy Đủ Thông Tin");
     }
   }
   // apis
-  apiPutNotification(id, cate) {
+  apiPutContacts(id, cate) {
     const config = { headers: { 'x-access-token': this.context.token } };
-    axios.put('/api/admin/notifications/' + id, cate, config).then((res) => {
+    axios.put('/api/admin/contacts/' + id, cate, config).then((res) => {
       const result = res.data;
       if (result) {
         toast.success("Cập Nhập Thành Công");
-        this.apiGetNotifications();
+        this.apiGetContacts();
       } else {
         toast.error("Cập Nhập Không Thành Công");
       }
@@ -97,20 +103,20 @@ class NotificationDetail extends Component {
     if (window.confirm('ARE YOU SURE?')) {
       const id = this.state.txtID;
       if (id) {
-        this.apiDeleteNotification(id);
+        this.apiDeleteSizes(id);
       } else {
-        toast.info("Vui Lòng Nhập ID")
+        toast.info("Vui Lòng Nhập ID");
       }
     }
   }
   // apis
-  apiDeleteNotification(id) {
+  apiDeleteSizes(id) {
     const config = { headers: { 'x-access-token': this.context.token  } };
-    axios.delete('/api/admin/notifications/' + id, config).then((res) => {
+    axios.delete('/api/admin/contacts/' + id, config).then((res) => {
       const result = res.data;
       if (result) {
         toast.success("Xoá Thành Công");
-        this.apiGetNotifications();
+        this.apiGetContacts();
       } else {
         toast.error("Xoá Không Thành Công");
       }
@@ -119,37 +125,38 @@ class NotificationDetail extends Component {
   btnAddClick(e) {
     e.preventDefault();
     const name = this.state.txtName;
-    if (name) {
-      const cate = { name: name };
-      this.apiPostNotification(cate);
+    const noidung = this.state.txtNoidung;
+    if (name && noidung) {
+      const cate = { name: name,noidung:noidung };
+      this.apiPostContacts(cate);
     } else {
       toast.info("Vui Lòng Nhập Đầy Đủ Thông Tin");
     }
   }
   // apis
-  apiPostNotification(cate) {
+  apiPostContacts(cate) {
     const config = { headers: { 'x-access-token': this.context.token } };
-    axios.post('/api/admin/notifications', cate, config).then((res) => {
+    axios.post('/api/admin/contacts', cate, config).then((res) => {
       const result = res.data;
       if (result) {
         toast.success("Thêm Thành Công");
-        this.apiGetNotifications();
+        this.apiGetContacts();
       } else {
         toast.error("Thêm Không Thành Công");
       }
     });
   }
-  apiGetNotifications() {
+  apiGetContacts() {
     const config = { headers: { 'x-access-token': this.context.token  } };
-    axios.get('/api/admin/notifications', config).then((res) => {
+    axios.get('/api/admin/contacts', config).then((res) => {
       const result = res.data;
-      this.props.updateNotifications(result);
+      this.props.updateContacts(result);
     });
   }
   componentDidUpdate(prevProps) {
     if (this.props.item !== prevProps.item) {
-      this.setState({ txtID: this.props.item._id, txtName: this.props.item.name });
+      this.setState({ txtID: this.props.item._id, txtName: this.props.item.name ,txtNoidung: this.props.item.noidung});
     }
   }
 }
-export default NotificationDetail;
+export default ContactDetail;

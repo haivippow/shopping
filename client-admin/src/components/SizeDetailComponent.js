@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import MyContext from '../contexts/MyContext';
 import { toast } from 'react-toastify';
 
-class NotificationDetail extends Component {
+class SizeDetail extends Component {
   static contextType = MyContext; // using this.context to access global state
   constructor(props) {
     super(props);
@@ -15,7 +15,7 @@ class NotificationDetail extends Component {
   render() {
     return (
       <div className="float-right">
-        <h2 className="text-center">Thêm Thông Báo</h2>
+        <h2 className="text-center">Thêm Size</h2>
         <form>
           <table>
             <tbody>
@@ -24,7 +24,7 @@ class NotificationDetail extends Component {
                 <td><input type="text" value={this.state.txtID} onChange={(e) => { this.setState({ txtID: e.target.value }) }} readOnly={true} /></td>
               </tr>
               <tr>
-                <td>Name</td>
+                <td>Name Size</td>
                 <td><input type="text" value={this.state.txtName} onChange={(e) => { this.setState({ txtName: e.target.value }) }} /></td>
               </tr>
               <tr>
@@ -73,19 +73,19 @@ class NotificationDetail extends Component {
     const name = this.state.txtName;
     if (id && name) {
       const cate = { name: name };
-      this.apiPutNotification(id, cate);
+      this.apiPutSize(id, cate);
     } else {
       toast.info("Vui Lòng Nhập Đầy Đủ Thông Tin");
     }
   }
   // apis
-  apiPutNotification(id, cate) {
+  apiPutSize(id, cate) {
     const config = { headers: { 'x-access-token': this.context.token } };
-    axios.put('/api/admin/notifications/' + id, cate, config).then((res) => {
+    axios.put('/api/admin/sizes/' + id, cate, config).then((res) => {
       const result = res.data;
       if (result) {
-        toast.success("Cập Nhập Thành Công");
-        this.apiGetNotifications();
+        toast.success("Cập Nhập Thành Công"); 
+        this.apiGetSizes();
       } else {
         toast.error("Cập Nhập Không Thành Công");
       }
@@ -97,20 +97,20 @@ class NotificationDetail extends Component {
     if (window.confirm('ARE YOU SURE?')) {
       const id = this.state.txtID;
       if (id) {
-        this.apiDeleteNotification(id);
+        this.apiDeleteSizes(id);
       } else {
-        toast.info("Vui Lòng Nhập ID")
+        toast.info("Vui Lòng Nhập ID");
       }
     }
   }
   // apis
-  apiDeleteNotification(id) {
+  apiDeleteSizes(id) {
     const config = { headers: { 'x-access-token': this.context.token  } };
-    axios.delete('/api/admin/notifications/' + id, config).then((res) => {
+    axios.delete('/api/admin/sizes/' + id, config).then((res) => {
       const result = res.data;
       if (result) {
         toast.success("Xoá Thành Công");
-        this.apiGetNotifications();
+        this.apiGetSizes();
       } else {
         toast.error("Xoá Không Thành Công");
       }
@@ -121,29 +121,29 @@ class NotificationDetail extends Component {
     const name = this.state.txtName;
     if (name) {
       const cate = { name: name };
-      this.apiPostNotification(cate);
+      this.apiPostSizes(cate);
     } else {
       toast.info("Vui Lòng Nhập Đầy Đủ Thông Tin");
     }
   }
   // apis
-  apiPostNotification(cate) {
+  apiPostSizes(cate) {
     const config = { headers: { 'x-access-token': this.context.token } };
-    axios.post('/api/admin/notifications', cate, config).then((res) => {
+    axios.post('/api/admin/sizes', cate, config).then((res) => {
       const result = res.data;
       if (result) {
         toast.success("Thêm Thành Công");
-        this.apiGetNotifications();
+        this.apiGetSizes();
       } else {
         toast.error("Thêm Không Thành Công");
       }
     });
   }
-  apiGetNotifications() {
+  apiGetSizes() {
     const config = { headers: { 'x-access-token': this.context.token  } };
-    axios.get('/api/admin/notifications', config).then((res) => {
+    axios.get('/api/admin/sizes', config).then((res) => {
       const result = res.data;
-      this.props.updateNotifications(result);
+      this.props.updateSizes(result);
     });
   }
   componentDidUpdate(prevProps) {
@@ -152,4 +152,4 @@ class NotificationDetail extends Component {
     }
   }
 }
-export default NotificationDetail;
+export default SizeDetail;

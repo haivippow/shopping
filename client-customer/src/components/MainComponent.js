@@ -18,11 +18,14 @@ import ContactInfo from './ContactInfoComponent';
 import ResetPW from './ResetPasswordComponent';
 import MyProductFavorite from './MyProductFavoriteComponent';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class Main extends Component {
   render() {
     return (
         <div className="body-customer">
+        <ToastContainer />
         <Inform />
         <Menu />
         <Routes>

@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import withRouter from '../utils/withRouter';
+import { toast } from 'react-toastify';
 
 class Menu extends Component {
   constructor(props) {
@@ -57,7 +58,13 @@ class Menu extends Component {
 
   btnSearchClick = (e) => {
     e.preventDefault();
-    this.props.navigate('/product/search/' + this.state.txtKeyword);
+    if(this.state.txtKeyword){
+      this.props.navigate('/product/search/' + this.state.txtKeyword);
+    }
+    else{
+      toast.info("Vui Lòng Nhập Thông Tin Tìm Kiếm");
+    }
+    
   };
 
   componentDidMount() {

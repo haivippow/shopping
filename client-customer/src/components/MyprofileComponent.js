@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import { Navigate } from 'react-router-dom';
 import MyContext from '../contexts/MyContext';
+import { toast } from 'react-toastify';
 
 class Myprofile extends Component {
   static contextType = MyContext; // using this.context to access global state
@@ -29,7 +30,7 @@ class Myprofile extends Component {
   
     return (
       <div className="align-center">
-        <h2 className="text-center">Thông Tin Thành Viên</h2>
+        <h2 className="text-center">Thông Tin Khách Hàng</h2>
         <div>
           <button onClick={() => this.changeTab('customer')} className={this.state.activeTab === 'customer' ? 'active' : ''}>Thông Tin Khách Hàng</button>
           <span style={{ margin: '0 10px' }}></span>
@@ -62,7 +63,7 @@ class Myprofile extends Component {
                 </tr>
                 <tr>
                   <td></td>
-                  <td><input type="submit" value="UPDATE" onClick={(e) => this.btnUpdateClick(e)} /></td>
+                  <td><input type="submit" value="Cập Nhập Thông Tin" onClick={(e) => this.btnUpdateClick(e)} /></td>
                 </tr>
               </tbody>
             </table>
@@ -89,7 +90,7 @@ class Myprofile extends Component {
                 </tr>
                 <tr>
                   <td></td>
-                  <td><input type="submit" value="UPDATE ADDRESS" onClick={(e) => this.btnUpdateAddressClick(e)} /></td>
+                  <td><input type="submit" value="Cập Nhập Địa Chỉ" onClick={(e) => this.btnUpdateAddressClick(e)} /></td>
                 </tr>
               </tbody>
             </table>
@@ -150,7 +151,8 @@ class Myprofile extends Component {
       const customer = { username, password, name, phone, email };
       this.apiPutCustomer(this.context.customer._id, customer);
     } else {
-      alert('Please input all customer information fields');
+      // alert('Please input all customer information fields');
+      toast.info('Vui Lòng Nhập Đầy Đủ Thông Tin')
     }
   }
 
@@ -164,7 +166,7 @@ class Myprofile extends Component {
       const address = { sonha, phuong, quan, thanhpho };
       this.apiPutAddress(this.context.customer._id, address);
     } else {
-      alert('Please input Số nhà, Phường, Quận và Thành Phố');
+      toast.info('Vui Lòng Nhập Đầy Đủ Thông Tin')
     }
 
 
@@ -176,10 +178,10 @@ class Myprofile extends Component {
     axios.put('/api/customer/customers/' + id, customer, config).then((res) => {
       const result = res.data;
       if (result) {
-        alert('Customer information updated successfully!');
+        toast.success('Cập Nhập Thông Tin Thành Công');
         this.context.setCustomer(result);
       } else {
-        alert('Failed to update customer information!');
+        toast.error("Cập Nhập Thông Tin Thất Bại");
       }
     });
   }
@@ -189,11 +191,11 @@ class Myprofile extends Component {
     axios.put('/api/customer/address/' + id, address, config).then((res) => {
       const result = res.data;
       if (result) {
-        alert('Address updated successfully!');
+        toast.success('Cập Nhập Địa Chỉ Thành Công');
         this.context.setCustomer(result);
 
       } else {
-        alert('Failed to update address!');
+        toast.error("Cập Nhập Địa Chỉ Thất Bại");
       }
     });
   }

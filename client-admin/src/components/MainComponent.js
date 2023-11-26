@@ -8,6 +8,10 @@ import Notification from './NotificationComponent';
 import Product from './ProductComponent';
 import Order from './OrderComponent'; 
 import Customer from './CustomerComponent';
+import Size from './SizeComponent';
+import Contact from './ContactComponent';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 class Main extends Component {
@@ -16,6 +20,7 @@ class Main extends Component {
     if (this.context.admin !== null) {
       return (
         <div className="body-admin">
+          <ToastContainer />
         <Menu />
         <Routes>
           <Route path='/admin' element={<Navigate replace to='/admin/home' />} />
@@ -25,6 +30,9 @@ class Main extends Component {
           <Route path='/admin/product' element={<Product />} />
           <Route path='/admin/order' element={<Order />} />
           <Route path='/admin/customer' element={<Customer />} />
+          <Route path='/admin/size' element={<Size />} />
+          <Route path='/admin/contact' element={<Contact />} />
+
 
         </Routes>
       </div>

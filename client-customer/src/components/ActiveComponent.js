@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { Component } from 'react';
+import { toast } from 'react-toastify';
 
 class Active extends Component {
   constructor(props) {
@@ -43,7 +44,7 @@ class Active extends Component {
     if (id && token) {
       this.apiActive(id, token);
     } else {
-      alert('Please input id and token');
+      toast.info("Vui Lòng Nhập Đầy Đủ Thông Tin");
     }
   }
   // apis
@@ -52,10 +53,10 @@ class Active extends Component {
     axios.post('/api/customer/active', body).then((res) => {
       const result = res.data;
       if (result) {
-        alert('OK BABY!');
+        toast.success("ACTIVE Thành Công")
         this.props.navigate('/login');
       } else {
-        alert('SORRY BABY!');
+        toast.error("ACTIVE Thất Bại")
       }
     });
   }

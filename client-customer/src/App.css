@@ -159,7 +159,7 @@ tr:not(:first-child):hover.datatable {
 }
 .right-positioned {
   position: absolute;
-  top: 25%;
+  top: 16%;
   right: 15%;
 }
 

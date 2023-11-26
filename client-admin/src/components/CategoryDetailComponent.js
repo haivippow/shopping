@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 import MyContext from '../contexts/MyContext';
+import { toast } from 'react-toastify';
 
 class CategoryDetail extends Component {
   static contextType = MyContext; // using this.context to access global state
@@ -15,7 +16,7 @@ class CategoryDetail extends Component {
   render() {
     return (
       <div className="float-right">
-        <h2 className="text-center">CATEGORY DETAIL</h2>
+        <h2 className="text-center">Thêm Danh Mục</h2>
         <form>
           <table>
             <tbody>
@@ -89,7 +90,7 @@ class CategoryDetail extends Component {
       const cate = { name: name };
       this.apiPutCategory(id, cate);
     } else {
-      alert('Please input id and name');
+      toast.info("Vui Lòng Nhập Đầy Đủ Thông Tin");
     }
   }
   // apis
@@ -98,10 +99,10 @@ class CategoryDetail extends Component {
     axios.put('/api/admin/categories/' + id, cate, config).then((res) => {
       const result = res.data;
       if (result) {
-        alert('OK BABY!');
+        toast.success("Cập Nhập Thành Công");
         this.apiGetCategories();
       } else {
-        alert('SORRY BABY!');
+        toast.error("Cập Nhập Không Thành Công");
       }
     });
   }
@@ -113,7 +114,7 @@ class CategoryDetail extends Component {
       if (id) {
         this.apiDeleteCategory(id);
       } else {
-        alert('Please input id');
+        toast.info("Vui Lòng Nhập ID");
       }
     }
   }
@@ -123,10 +124,10 @@ class CategoryDetail extends Component {
     axios.delete('/api/admin/categories/' + id, config).then((res) => {
       const result = res.data;
       if (result) {
-        alert('OK BABY!');
+        toast.success("Xoá Thành Công");
         this.apiGetCategories();
       } else {
-        alert('SORRY BABY!');
+        toast.error("Xoá Không Thành Công");
       }
     });
   }
@@ -136,10 +137,9 @@ class CategoryDetail extends Component {
     const size = this.state.selectedSize;
     if (name && size) {
       const cate = { name: name ,size:size};
-      console.log(cate);
       this.apiPostCategory(cate);
     } else {
-      alert('Please input name');
+      toast.info("Vui Lòng Nhập Đầy Đủ Thông Tin");
     }
   }
   // apis
@@ -148,10 +148,10 @@ class CategoryDetail extends Component {
     axios.post('/api/admin/categories', cate, config).then((res) => {
       const result = res.data;
       if (result) {
-        alert('OK BABY!');
+        toast.success("Thêm Thành Công");
         this.apiGetCategories();
       } else {
-        alert('SORRY BABY!');
+        toast.error("Thêm Không Thành Công");
       }
     });
   }

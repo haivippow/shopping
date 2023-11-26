@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { Component } from 'react';
+import { toast } from 'react-toastify';
 
 class ResetPW extends Component {
 
@@ -53,14 +54,13 @@ class ResetPW extends Component {
       const account = {email: email };
       this.apiSendToken(account);
     } else {
-      alert('Please input email');
+      toast.info('Vui Lòng Nhập Email')
     }
   }
   apiSendToken(account){
     axios.post('/api/customer/reset-password', account).then((res) => {
         const result = res.data;
-        alert(result.message);
-    
+        toast.success(result.success);
       });
   }
 
@@ -74,7 +74,7 @@ class ResetPW extends Component {
       const account = { email: email, resetToken: resetToken, password: password };
       this.apiConfirm(account);
     } else {
-      alert('Please input email and token and password');
+      toast.info('Vui Lòng Nhập Đầy Đủ Thông Tin')
     }
   }
   // apis
@@ -82,7 +82,7 @@ class ResetPW extends Component {
   apiConfirm(account) {
     axios.post('/api/customer/comfirm', account).then((res) => {
       const result = res.data;
-      alert(result.message);
+      toast.success(result.success);
     
     });
   }

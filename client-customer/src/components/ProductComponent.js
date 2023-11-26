@@ -16,7 +16,7 @@ class Product extends Component {
         <div key={item._id} className="inline">
           <figure>
           <Link to={'/product/' + item._id}><img src={"data:image/jpg;base64," + item.image} width="300px" height="300px" alt="" /></Link>
-            <figcaption className="text-center">Tên Sản Phẩm: {item.name}<br />Giá: {item.price}</figcaption>
+            <figcaption className="text-center">Tên Sản Phẩm: {item.name}<br />Giá: {(item.price).toLocaleString('vi-VN')} VNĐ</figcaption>
           </figure>
         </div>
       );

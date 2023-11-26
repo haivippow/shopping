@@ -13,34 +13,41 @@ const CategoryDAO = require('../models/CategoryDAO');
 router.get('/admins/:token_web_admin', async function(req, res) {
   const token_web_admin = req.params.token_web_admin;
   const admins = await AdminDAO.select_token_web_admin(token_web_admin);
+
   res.json(admins);
 });
 
 // product
 router.get('/products', JwtUtil.checkToken, async function(req, res) {
-  // pagination
-  const noProducts = await ProductDAO.selectByCount();
-  const sizePage = 4;
-  const noPages = Math.ceil(noProducts / sizePage);
-  var curPage = 1;
-  if (req.query.page) curPage = parseInt(req.query.page); // /products?page=xxx
-  const skip = (curPage - 1) * sizePage;
-  const products = await ProductDAO.selectBySkipLimit(skip, sizePage);
-  // return
-  const result = { products: products, noPages: noPages, curPage: curPage };
-  res.json(result);
+  try {
+    // pagination
+    const noProducts = await ProductDAO.selectByCount();
+    const sizePage = 4;
+    const noPages = Math.ceil(noProducts / sizePage);
+    var curPage = 1;
+    if (req.query.page) curPage = parseInt(req.query.page); // /products?page=xxx
+    const skip = Math.max(0, (curPage - 1) * sizePage);
+    const products = await ProductDAO.selectBySkipLimit(skip, sizePage);
+    // return
+    const result = { products: products, noPages: noPages, curPage: curPage };
+    res.json(result);
+  } catch (error) {
+    console.error("Error in /products endpoint:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
+
 router.post('/products', JwtUtil.checkToken, async function(req, res) {
   const name = req.body.name;
   const price = req.body.price;
   const cid = req.body.category;
   const image = req.body.image;
-  const imageChitiet = req.body.imageChitiet; // Assuming imageChitiet is an array of strings
+  const imageDetail = req.body.imageDetail; // Assuming imageChitiet is an array of strings
   const now = new Date().getTime(); // milliseconds
   const category = await CategoryDAO.selectByID(cid);
 
   // Create an object with the new imageChitiet field
-  const product = {name: name, price: price, image: image, imageChitiet: imageChitiet, cdate: now, category: category };
+  const product = {name: name, price: price, image: image, imageDetail: imageDetail, cdate: now, category: category };
 
   const result = await ProductDAO.insert(product);
   res.json(result);
@@ -52,9 +59,10 @@ router.put('/products/:id', JwtUtil.checkToken, async function(req, res) {
   const price = req.body.price;
   const cid = req.body.category;
   const image = req.body.image;
+  const imageDetail = req.body.imageDetail;
   const now = new Date().getTime(); // milliseconds
   const category = await CategoryDAO.selectByID(cid);
-  const product = { _id: _id, name: name, price: price, image: image, cdate: now, category: category };
+  const product = { _id: _id, name: name, price: price, image: image,imageDetail: imageDetail, cdate: now, category: category };
   const result = await ProductDAO.update(product);
   res.json(result);
 });
@@ -108,7 +116,6 @@ router.post('/login', async function(req, res) {
 router.get('/getadmintoken', JwtUtil.checkToken, async function(req, res) {
   const username = req.username;
   const id = req.id;
-  console.log(id);
   const admins = await AdminDAO.selectByID(id);
   res.json(admins);
 });
@@ -194,5 +201,60 @@ router.delete('/notifications/:id', JwtUtil.checkToken, async function (req, res
   const result = await NotificationDAO.delete(_id);
   res.json(result);
 });
+
+const SizeDAO = require('../models/SizeDAO');
+router.get('/sizes', JwtUtil.checkToken, async function (req, res) {
+  const sizes = await SizeDAO.selectAll();
+  res.json(sizes);
+});
+router.post('/sizes', JwtUtil.checkToken, async function (req, res) {
+  const name = req.body.name;
+  const sizes = { name: name };
+  const result = await SizeDAO.insert(sizes);
+  res.json(result);
+});
+router.put('/sizes/:id', JwtUtil.checkToken, async function (req, res) {
+  const _id = req.params.id;
+  const name = req.body.name;
+  const sizes = { _id: _id, name: name };
+  const result = await SizeDAO.update(sizes);
+  res.json(result);
+});
+router.delete('/sizes/:id', JwtUtil.checkToken, async function (req, res) {
+  const _id = req.params.id;
+  const result = await SizeDAO.delete(_id);
+  res.json(result);
+});
+
+
+
+const ContactDAO = require('../models/ContactDAO');
+
+router.get('/contacts', JwtUtil.checkToken, async function (req, res) {
+  const sizes = await ContactDAO.selectAll();
+  res.json(sizes);
+});
+router.post('/contacts', JwtUtil.checkToken, async function (req, res) {
+  const name = req.body.name;
+  const noidung = req.body.noidung;
+  const contacts = { name: name ,noidung:noidung};
+  const result = await ContactDAO.insert(contacts);
+  res.json(result);
+});
+router.put('/contacts/:id', JwtUtil.checkToken, async function (req, res) {
+  const _id = req.params.id;
+  const name = req.body.name;
+  const noidung = req.body.noidung;
+  const contacts = { _id: _id, name: name ,noidung:noidung};
+  const result = await ContactDAO.update(contacts);
+  res.json(result);
+});
+router.delete('/contacts/:id', JwtUtil.checkToken, async function (req, res) {
+  const _id = req.params.id;
+  const result = await ContactDAO.delete(_id);
+  res.json(result);
+});
+
+
 
 module.exports = router;

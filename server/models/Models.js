@@ -25,6 +25,17 @@ const NotificationSchema = mongoose.Schema({
   name: String
 }, { versionKey: false });
 
+const SizeSchema = mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId,
+  name: String
+}, { versionKey: false });
+
+const ContactSchema = mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId,
+  name: String,
+  noidung:String,
+}, { versionKey: false });
+
 const CustomerSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   username: String,
@@ -43,7 +54,7 @@ const ProductSchema = mongoose.Schema({
   name: String,
   price: Number,
   image: String,
-  imageChitiet: [String], 
+  imageDetail: [String], 
   cdate: Number,
   category: CategorySchema
 }, { versionKey: false });
@@ -74,10 +85,12 @@ const ProductFavoriteSchema = mongoose.Schema({
 const Admin = mongoose.model('Admin', AdminSchema);
 const Category = mongoose.model('Category', CategorySchema);
 const Notification = mongoose.model('Notification', NotificationSchema);
+const Size = mongoose.model('Size', SizeSchema);
+const Contact = mongoose.model('Contact', ContactSchema);
 const Customer = mongoose.model('Customer', CustomerSchema);
 const Product = mongoose.model('Product', ProductSchema);
 const Order = mongoose.model('Order', OrderSchema);
 const ProductFavorite = mongoose.model('ProductFavorite', ProductFavoriteSchema);
  // Include Address model
 
-module.exports = { Admin, Category, Notification, Customer, Product, Order, ProductFavorite };
+module.exports = { Admin, Category, Notification, Customer, Product, Order, ProductFavorite ,Size,Contact};

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 import MyContext from '../contexts/MyContext';
+import { toast } from 'react-toastify';
 
 class ProductDetail extends Component {
   static contextType = MyContext; // using this.context to access global state
@@ -13,7 +14,7 @@ class ProductDetail extends Component {
       txtPrice: 0,
       cmbCategory: '',
       imgProduct: '',
-      imagesChitiet: [],
+      imgDetail: [],
     };
   }
   render() {
@@ -26,7 +27,7 @@ class ProductDetail extends Component {
     });
     return (
       <div className="float-right">
-        <h2 className="text-center">Thêm Mới Sản Phẩm</h2>
+        <h2 className="text-center">Thêm Sản Phẩm</h2>
         <form>
           <table>
             <tbody>
@@ -67,7 +68,7 @@ class ProductDetail extends Component {
               </td>
               <tr>
                 <td colSpan="2">  
-                  {this.state.imagesChitiet.map((image, index) => (
+                  {this.state.imgDetail.map((image, index) => (
                     <img key={index}  src={image} width="150px" height="150px" alt="" />
                   ))}
                 </td>
@@ -111,12 +112,12 @@ class ProductDetail extends Component {
         txtPrice: this.props.item.price,
         cmbCategory: this.props.item.category._id,
         imgProduct: 'data:image/jpg;base64,' + this.props.item.image,
-        imagesChitiet: (this.props.item.imageChitiet || []).map(image => 'data:image/jpg;base64,' + image),
+        imgDetail: (this.props.item.imageDetail || []).map(image => 'data:image/jpg;base64,' + image),
       }, () => {
-        console.log('Updated state:', this.state.imagesChitiet);
+        console.log('Updated state:', this.state.imgDetail);
       });
   
-      console.log('Prop value:', this.props.item.imageChitiet);
+      console.log('Prop value:', this.props.item.imgDetail);
     }
   }
   
@@ -130,7 +131,7 @@ class ProductDetail extends Component {
       if (id) {
         this.apiDeleteProduct(id);
       } else {
-        alert('Please input id');
+        toast.info("Vui Lòng Nhập ID");
       }
     }
   }
@@ -140,10 +141,10 @@ class ProductDetail extends Component {
     axios.delete('/api/admin/products/' + id, config).then((res) => {
       const result = res.data;
       if (result) {
-        alert('OK BABY!');
+        toast.success("Xoá Thành Công");
         this.apiGetProducts();
       } else {
-        alert('SORRY BABY!');
+        toast.error("Xoá Không Thành Công");
       }
     });
   }
@@ -154,17 +155,17 @@ class ProductDetail extends Component {
     const price = parseInt(this.state.txtPrice);
     const category = this.state.cmbCategory;
     const image = this.state.imgProduct.replace(/^data:image\/[a-z]+;base64,/, ''); // remove "data:image/...;base64,"
-    const imageChitiet = this.state.imagesChitiet.map((img) => img.replace(/^data:image\/[a-z]+;base64,/, ''));
-    if(imageChitiet.length<4){
-      if (id && name && price && category && image && imageChitiet.length >0) {
-        const prod = { name: name, price: price, category: category, image: image, imageChitiet: imageChitiet};
+    const imageDetail = this.state.imgDetail.map((img) => img.replace(/^data:image\/[a-z]+;base64,/, ''));
+    if(imageDetail.length<5){
+      if (id && name && price && category && image && imageDetail.length >0) {
+        const prod = { name: name, price: price, category: category, image: image, imageDetail: imageDetail};
         this.apiPutProduct(id, prod);
       } else {
-        alert('Please input name, price, category, image, and imageChitiet');
+        toast.info("Vui Lòng Nhập Đầy Đủ Thông Tin");
       }
     }
     else{
-      alert('Vui Lòng Chọn 3 Ảnh Chi Tiết');
+      toast.warn('Vui Lòng Chọn 4 Ảnh Chi Tiết');
     }
     
   }
@@ -174,10 +175,10 @@ class ProductDetail extends Component {
     axios.put('/api/admin/products/' + id, prod, config).then((res) => {
       const result = res.data;
       if (result) {
-        alert('OK BABY!');
+        toast.success("Cập Nhập Thành Công");
         this.apiGetProducts();
       } else {
-        alert('SORRY BABY!');
+        toast.error("Cập Nhập Không Thành Công");
       }
     });
   }
@@ -187,12 +188,17 @@ class ProductDetail extends Component {
     const price = parseInt(this.state.txtPrice);
     const category = this.state.cmbCategory;
     const image = this.state.imgProduct.replace(/^data:image\/[a-z]+;base64,/, ''); // remove "data:image/...;base64,"
-    const imageChitiet = this.state.imagesChitiet.map((img) => img.replace(/^data:image\/[a-z]+;base64,/, ''));
-    if (name && price && category && image && imageChitiet.length > 0) {
-      const prod = { name: name, price: price, category: category, image: image, imageChitiet: imageChitiet };
-      this.apiPostProduct(prod);
-    } else {
-      alert('Please input name, price, category, image, and imageChitiet');
+    const imageDetail = this.state.imgDetail.map((img) => img.replace(/^data:image\/[a-z]+;base64,/, ''));
+    if(imageDetail.length<5){
+      if (name && price && category && image && imageDetail.length > 0) {
+        const prod = { name: name, price: price, category: category, image: image, imageDetail: imageDetail };
+        this.apiPostProduct(prod);
+      } else {
+        toast.info("Vui Lòng Nhập Đầy Đủ Thông Tin");
+      }
+    }
+    else{
+      toast.warn('Vui Lòng Chọn 4 Ảnh Chi Tiết');
     }
   }
   
@@ -202,10 +208,10 @@ class ProductDetail extends Component {
     axios.post('/api/admin/products', prod, config).then((res) => {
       const result = res.data;
       if (result) {
-        alert('OK BABY!');
+        toast.success("Thêm Thành Công");
         this.apiGetProducts();
       } else {
-        alert('SORRY BABY!');
+        toast.error("Thêm Không Thành Công");
       }
     });
   }
@@ -222,8 +228,8 @@ class ProductDetail extends Component {
       this.props.updateProducts(result.products, result.noPages, curPage);
     });
   }
-});
-}
+  });
+  }
   // event-handlers
   previewImage(e) {
     const file = e.target.files[0];
@@ -259,7 +265,7 @@ class ProductDetail extends Component {
   
       // After all files are read, update the state
       Promise.all(promises).then(() => {
-        this.setState({ imagesChitiet: newImages }, () => {
+        this.setState({ imgDetail: newImages }, () => {
   
         });
       });
@@ -274,8 +280,6 @@ class ProductDetail extends Component {
     axios.get('/api/admin/categories', config).then((res) => {
       const result = res.data;
       this.setState({ categories: result });
-
-
     });
   }
 }

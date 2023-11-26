@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 import MyContext from '../contexts/MyContext';
+import { toast } from 'react-toastify';
 
 class Login extends Component {
   static contextType = MyContext; // using this.context to access global state
@@ -48,7 +49,7 @@ class Login extends Component {
       const account = { username: username, password: password };
       this.apiLogin(account);
     } else {
-      alert('Please input username and password');
+      toast.info("Vui Lòng Nhập Đầy Đủ Thông Tin");
     }
   }
 
@@ -83,8 +84,9 @@ class Login extends Component {
         localStorage.setItem("token_admin",result.token);
         this.context.setToken(result.token);
         this.context.setUsername(account.username);
+        toast.success("Đăng Nhập Thành Công");
       } else {
-        alert(result.message);
+        toast.error(result.message);
       }
     });
   }

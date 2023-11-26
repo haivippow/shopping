@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import MyContext from '../contexts/MyContext';
 import withRouter from '../utils/withRouter';
+import { toast } from 'react-toastify';
 
 
 class Login extends Component {
@@ -9,8 +10,8 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      txtUsername: 'admin',
-      txtPassword: '123'
+      txtUsername: '',
+      txtPassword: ''
     };
   }
   render() {
@@ -77,7 +78,7 @@ class Login extends Component {
       const account = { username: username, password: password };
       this.apiLogin(account);
     } else {
-      alert('Please input username and password');
+      toast.error('Vui Lòng Nhập Tài Khoản Và Mật Khẩu');
     }
   }
   // apis
@@ -88,6 +89,7 @@ class Login extends Component {
         this.context.setToken(result.token);
        localStorage.setItem("token_user",result.token);
         this.context.setCustomer(result.customer);
+        toast.success('Đăng Nhập Thành Công');
         this.props.navigate('/home');
       } else {
         alert(result.message);

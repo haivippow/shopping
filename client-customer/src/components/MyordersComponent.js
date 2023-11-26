@@ -14,16 +14,17 @@ class Myorders extends Component {
   }
   render() {
     if (this.context.customer === "") return (<Navigate replace to='/login' />);
-    const orders = this.state.orders.map((item) => {
+    const orders = this.state.orders.map((item,index) => {
       let Straddress = item.customer.address.sonha + ' ' + item.customer.address.phuong+' '+item.customer.address.quan+' '+item.customer.address.thanhpho;
       return (
         <tr key={item._id} className="datatable" onClick={() => this.trItemClick(item)}>
+           <td>{index + 1}</td>
           <td>{item._id}</td>
           <td>{new Date(item.cdate).toLocaleString()}</td>
           <td>{item.customer.name}</td>
           <td>{item.customer.phone}</td>
           <td>{Straddress}</td>
-          <td>{item.total}</td>
+          <td>{(item.total).toLocaleString('vi-VN')} VNĐ</td>
           <td>{item.status}</td>
         </tr>
       );
@@ -33,13 +34,13 @@ class Myorders extends Component {
         return (
           <tr key={item.product._id} className="datatable">
             <td>{index + 1}</td>
-            <td>{item.product._id}</td>
+            {/* <td>{item.product._id}</td> */}
             <td>{item.product.name}</td>
             <td><img src={"data:image/jpg;base64," + item.product.image} width="70px" height="70px" alt="" /></td>
-            <td>{item.product.price}</td>
+            <td>{(item.product.price).toLocaleString('vi-VN')} VNĐ</td>
             <td>{item.size}</td>
             <td>{item.quantity}</td>
-            <td>{item.product.price * item.quantity}</td>
+            <td>{(item.product.price * item.quantity).toLocaleString('vi-VN')} VNĐ</td>
           </tr>
         );
       });
@@ -51,13 +52,14 @@ class Myorders extends Component {
           <table className="datatable" border="1">
             <tbody>
               <tr className="datatable">
+              <th>STT</th>
                 <th>ID</th>
-                <th>Creation date</th>
-                <th>Cust.name</th>
-                <th>Cust.phone</th>
-                <th>Cust.address</th>
-                <th>Total</th>
-                <th>Status</th>
+                <th>Ngày Đặt</th>
+                <th>Tên Khách Hàng</th>
+                <th>Số điện thoại</th>
+                <th>Địa Chỉ</th>
+                <th>Tổng</th>
+                <th>Trạng Thái</th>
               </tr>
               {orders}
             </tbody>
@@ -69,16 +71,17 @@ class Myorders extends Component {
             <table className="datatable" border="1">
               <tbody>
                 <tr className="datatable">
-                  <th>No.</th>
-                  <th>Prod.ID</th>
-                  <th>Prod.name</th>
-                  <th>Image</th>
-                  <th>Price</th>
+                  <th>STT</th>
+                  {/* <th>ID SP	</th> */}
+                  <th>Tên SP</th>
+                  <th>Hình Ảnh</th>
+                  <th>Giá</th>
                   <th>Size</th>
-                  <th>Quantity</th>
-                  <th>Amount</th>
+                  <th>Số Lượng</th>
+                  <th>Tổng Giá</th>
                 </tr>
                 {items}
+               
               </tbody>
             </table>
           </div>

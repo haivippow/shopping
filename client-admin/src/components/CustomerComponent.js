@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import MyContext from '../contexts/MyContext';
 
+
 class Customer extends Component {
   static contextType = MyContext; // using this.context to access global state
   constructor(props) {
@@ -41,7 +42,7 @@ class Customer extends Component {
           <td>{new Date(item.cdate).toLocaleString()}</td>
           <td>{item.customer.name}</td>
           <td>{item.customer.phone}</td>
-          <td>{item.total}</td>
+          <td>{(item.total).toLocaleString('vi-VN')} VNĐ</td>
           <td>{item.status}</td>
         </tr>
       );
@@ -54,9 +55,10 @@ class Customer extends Component {
             <td>{item.product._id}</td>
             <td>{item.product.name}</td>
             <td><img src={"data:image/jpg;base64," + item.product.image} width="70px" height="70px" alt="" /></td>
-            <td>{item.product.price}</td>
+            <td>{(item.product.price).toLocaleString('vi-VN')} VNĐ</td>
+            <td>{item.size}</td>
             <td>{item.quantity}</td>
-            <td>{item.product.price * item.quantity}</td>
+            <td>{(item.product.price * item.quantity).toLocaleString('vi-VN')} VNĐ</td>
           </tr>
         );
       });
@@ -71,8 +73,8 @@ class Customer extends Component {
                 <th>ID</th>
                 <th>Username</th>
                 <th>Password</th>
-                <th>Name</th>
-                <th>Phone</th>
+                <th>Tên Khách Hàng</th>
+                <th>Số Điện Thoại</th>
                 <th>Email</th>
                 <th>Active</th>
                 <th>Action</th>
@@ -88,11 +90,11 @@ class Customer extends Component {
               <tbody>
                 <tr className="datatable">
                   <th>ID</th>
-                  <th>Creation date</th>
-                  <th>Cust.name</th>
-                  <th>Cust.phone</th>
-                  <th>Total</th>
-                  <th>Status</th>
+                  <th>Ngày Đặt</th>
+                  <th>Tên Khách Hàng</th>
+                  <th>Số Điện Thoại</th>
+                  <th>Tổng</th>
+                  <th>Trạng Thái</th>
                 </tr>
                 {orders}
               </tbody>
@@ -105,13 +107,14 @@ class Customer extends Component {
             <table className="datatable" border="1">
               <tbody>
                 <tr className="datatable">
-                  <th>No.</th>
-                  <th>Prod.ID</th>
-                  <th>Prod.name</th>
-                  <th>Image</th>
-                  <th>Price</th>
-                  <th>Quantity</th>
-                  <th>Amount</th>
+                  <th>STT</th>
+                  <th>ID SP</th>
+                  <th>Tên SP</th>
+                  <th>Hình Ảnh</th>
+                  <th>Giá</th>
+                  <th>Size</th>
+                  <th>Số Lượng</th>
+                  <th>Tổng Giá</th>
                 </tr>
                 {items}
               </tbody>
