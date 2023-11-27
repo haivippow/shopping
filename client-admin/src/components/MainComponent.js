@@ -10,6 +10,7 @@ import Order from './OrderComponent';
 import Customer from './CustomerComponent';
 import Size from './SizeComponent';
 import Contact from './ContactComponent';
+import Slider from './SliderComponent';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -32,6 +33,7 @@ class Main extends Component {
           <Route path='/admin/customer' element={<Customer />} />
           <Route path='/admin/size' element={<Size />} />
           <Route path='/admin/contact' element={<Contact />} />
+          <Route path='/admin/slider' element={<Slider />} />
 
 
         </Routes>

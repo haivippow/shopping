@@ -34,7 +34,7 @@ class Login extends Component {
                 <td>
                   <input type="submit" value="Đăng Nhập" onClick={(e) => this.btnLoginClick(e)} />
                   <span style={{ marginLeft: '10px' }}> {/* Adjust the margin as needed */}
-                    <button type="button" onClick={(e) => this.btnResetPasswordClick(e)}>Quên Mật Khẩu</button>
+                    <input type="submit" value="Quên Mật Khẩu" onClick={(e) => this.btnResetPasswordClick(e)}></input>
                   </span>
                 </td>
               </tr>
@@ -47,6 +47,14 @@ class Login extends Component {
 
   componentDidMount() {
     this.GetUserToken();
+    this.getCart();
+  }
+  getCart(){
+    const storedMycart = localStorage.getItem('mycart');
+    if (storedMycart) {
+      const mycart = JSON.parse(storedMycart);
+      this.context.setMycart(mycart);
+    }
   }
 
   GetUserToken(){
@@ -89,6 +97,7 @@ class Login extends Component {
         this.context.setToken(result.token);
        localStorage.setItem("token_user",result.token);
         this.context.setCustomer(result.customer);
+        console.log()
         toast.success('Đăng Nhập Thành Công');
         this.props.navigate('/home');
       } else {

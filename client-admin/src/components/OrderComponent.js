@@ -103,7 +103,7 @@ class Order extends Component {
       } else {
         this.context.setToken(token_admin);
        this.context.setAdmin(result);
-      
+       this.context.setUsername(result.username);
       }
     });
 

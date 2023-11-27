@@ -91,12 +91,15 @@ class Mycart extends Component {
       this.props.navigate('/address');
     }
     else{
-      toast.warning("Không có sản phẩm trong Giỏ hàng");
+      toast.warning("Không có sản phẩm trong Giỏ Hàng");
     }
     
   }
 
   componentDidMount() {
+    this.getCart();
+  }
+  getCart(){
     const storedMycart = localStorage.getItem('mycart');
     if (storedMycart) {
       const mycart = JSON.parse(storedMycart);

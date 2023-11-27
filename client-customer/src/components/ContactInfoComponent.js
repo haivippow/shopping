@@ -14,10 +14,10 @@ class ContactInfo extends Component {
   render() {
     return (
       <div className="align-center">
-        <h2 className="text-center">Contact Info</h2>
+        <h2 className="text-center">Thông Tin Liên Hệ</h2>
         {this.state.contacts.map((contact) => (
           <div key={contact._id.$oid}>
-             <p><strong>{contact.name}:</strong> {contact.noidung}</p>
+             <p><strong>{contact.name} </strong> {contact.noidung}</p>
 
           </div>
         ))}
@@ -35,6 +35,14 @@ class ContactInfo extends Component {
 
   componentDidMount(){
     this.apiGetContacts();
+    this.getCart();
+  }
+  getCart(){
+    const storedMycart = localStorage.getItem('mycart');
+    if (storedMycart) {
+      const mycart = JSON.parse(storedMycart);
+      this.context.setMycart(mycart);
+    }
   }
 }
 

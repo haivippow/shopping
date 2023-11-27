@@ -63,6 +63,7 @@ class Menu extends Component {
     }
     else{
       toast.info("Vui Lòng Nhập Thông Tin Tìm Kiếm");
+
     }
     
   };

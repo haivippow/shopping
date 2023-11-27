@@ -175,10 +175,16 @@ router.get('/notifications', async function (req, res) {
   const notifications = await NotificationDAO.selectAll();
   res.json(notifications);
 });
-const SizeDao = require('../models/SizeDAO');
+const SizeDAO = require('../models/SizeDAO');
 router.get('/sizes', async function (req, res) {
-  const sizes = await SizeDao.selectAll();
+  const sizes = await SizeDAO.selectAll();
   res.json(sizes);
+});
+
+const SliderDAO = require('../models/SliderDAO');
+router.get('/sliders', async function (req, res) {
+  const sliders = await SliderDAO.selectAll();
+  res.json(sliders);
 });
 
 

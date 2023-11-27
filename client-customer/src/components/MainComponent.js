@@ -17,7 +17,6 @@ import TawkMessenger from './TawkMessengerComponent';
 import ContactInfo from './ContactInfoComponent';
 import ResetPW from './ResetPasswordComponent';
 import MyProductFavorite from './MyProductFavoriteComponent';
-
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -49,6 +48,8 @@ class Main extends Component {
         </Routes>
         <TawkMessenger />
       </div>
+      
+      
 
     );
     

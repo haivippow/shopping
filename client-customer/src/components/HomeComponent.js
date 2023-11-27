@@ -2,44 +2,59 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Slider from './SliderComponent'
+import MyContext from '../contexts/MyContext';
+import Footer from './FooterComponent';
 
 
 class Home extends Component {
+  static contextType = MyContext; // using this.context to access global state
   constructor(props) {
     super(props);
     this.state = {
       newprods: [],
-      hotprods: []
+      hotprods: [],
     };
   }
   render() {
     const newprods = this.state.newprods.map((item) => {
-      return (
-        <div key={item._id} className="inline">
-          <figure>
-          <Link to={'/product/' + item._id}><img src={"data:image/jpg;base64," + item.image} width="300px" height="300px" alt="" /></Link>
-            <figcaption className="text-center">Tên Sản Phẩm: {item.name}<br />Giá: {(item.price).toLocaleString('vi-VN')} VNĐ</figcaption>
-          </figure>
-        </div>
-      );
+      if (item && item._id) {
+        return (
+          <div key={item._id} className="inline">
+            <figure>
+            <Link to={'/product/' + item._id}><img src={"data:image/jpg;base64," + item.image} width="300px" height="300px" alt="" /></Link>
+              <figcaption className="text-center">Tên Sản Phẩm: {item.name}<br />Giá: {(item.price).toLocaleString('vi-VN')} VNĐ</figcaption>
+            </figure>
+          </div>
+        );
+      }else{
+        return null
+      }
     });
     const hotprods = this.state.hotprods.map((item) => {
-      return (
-        <div key={item._id} className="inline">
-          <figure>
-            
-          <Link to={'/product/' + item._id}><img src={"data:image/jpg;base64," + item.image} width="300px" height="300px" alt="" /></Link>
-            <figcaption className="text-center">Tên sản phẩm: {item.name}<br />Giá: {(item.price).toLocaleString('vi-VN')} VNĐ</figcaption>
-          </figure>
-        </div>
-        
-      );
+      if (item && item._id) {
+        return (
+          <div key={item._id} className="inline">
+            <figure>
+              
+            <Link to={'/product/' + item._id}><img src={"data:image/jpg;base64," + item.image} width="300px" height="300px" alt="" /></Link>
+              <figcaption className="text-center">Tên sản phẩm: {item.name}<br />Giá: {(item.price).toLocaleString('vi-VN')} VNĐ</figcaption>
+            </figure>
+          </div>
+          
+        );
+      }else{
+        return null
+      }
     });
     return (
-      <div>
+      
+      
+      <div style={{ minHeight: '100vh', position: 'relative' }}>
+        <div>
         <Slider/>
-        <div className="align-center" style={{ marginTop: '30px' }}>
+        </div>
        
+        <div className="align-center" style={{ marginTop: '30px' }}>
           <h2 className="text-center">SẢN PHẨM MỚI NHẤT</h2>
           {newprods}
         </div>
@@ -49,12 +64,25 @@ class Home extends Component {
             {hotprods}
           </div>
           : <div />}
+            
+            <Footer/>
+          
       </div>
+      
+      
     );
   }
   componentDidMount() {
     this.apiGetNewProducts();
     this.apiGetHotProducts();
+    this.getCart();
+  }
+  getCart(){
+    const storedMycart = localStorage.getItem('mycart');
+    if (storedMycart) {
+      const mycart = JSON.parse(storedMycart);
+      this.context.setMycart(mycart);
+    }
   }
   // apis
   apiGetNewProducts() {

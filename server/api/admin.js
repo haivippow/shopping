@@ -227,6 +227,31 @@ router.delete('/sizes/:id', JwtUtil.checkToken, async function (req, res) {
 });
 
 
+const SliderDAO = require('../models/SliderDAO');
+router.get('/sliders', JwtUtil.checkToken, async function (req, res) {
+  const sizes = await SliderDAO.selectAll();
+  res.json(sizes);
+});
+router.post('/sliders', JwtUtil.checkToken, async function (req, res) {
+  const name = req.body.name;
+  const sliders = { name: name };
+  const result = await SliderDAO.insert(sliders);
+  res.json(result);
+});
+router.put('/sliders/:id', JwtUtil.checkToken, async function (req, res) {
+  const _id = req.params.id;
+  const name = req.body.name;
+  const sliders = { _id: _id, name: name };
+  const result = await SliderDAO.update(sliders);
+  res.json(result);
+});
+router.delete('/sliders/:id', JwtUtil.checkToken, async function (req, res) {
+  const _id = req.params.id;
+  const result = await SliderDAO.delete(_id);
+  res.json(result);
+});
+
+
 
 const ContactDAO = require('../models/ContactDAO');
 

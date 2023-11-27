@@ -222,6 +222,14 @@ class ProductDetail extends Component {
     const params = this.props.params;
     this.apiGetProduct(params.id);
     this.apiGetSizes();
+    this.getCart();
+  }
+  getCart(){
+    const storedMycart = localStorage.getItem('mycart');
+    if (storedMycart) {
+      const mycart = JSON.parse(storedMycart);
+      this.context.setMycart(mycart);
+    }
   }
   // apis
   apiGetProduct(id) {

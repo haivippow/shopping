@@ -55,7 +55,14 @@ class Address extends Component {
   
   componentDidMount() {
     this.GetUserToken();
-  
+    this.getCart();
+  }
+  getCart(){
+    const storedMycart = localStorage.getItem('mycart');
+    if (storedMycart) {
+      const mycart = JSON.parse(storedMycart);
+      this.context.setMycart(mycart);
+    }
   }
 
   GetUserToken(){
@@ -83,6 +90,7 @@ class Address extends Component {
 
   lnkCheckoutClick(e) {
     e.preventDefault();
+       if(this.context.customer){
         const customer = this.context.customer;
         const sonha =this.state.txtSonha;
         const phuong = this.state.txtPhuong;
@@ -127,6 +135,9 @@ class Address extends Component {
         // Người dùng chọn "No", không thêm gì cả
         // Bạn có thể xử lý theo ý của mình ở đây
     }                 
+    }else{
+        toast.error("Vui Lòng Đăng Nhập Trước Khi Mua Hàng");
+       }
   }
 
   apiCheckout(total, items, customer_addressnew) {
@@ -137,6 +148,7 @@ class Address extends Component {
       if (result) {
         toast.success("Đặt Hàng Thành Công")
         this.context.setMycart([]);
+        localStorage.removeItem('mycart');
         this.props.navigate('/myorders');
       } else {
         toast.error("Đặt Hàng Không Thành Công")

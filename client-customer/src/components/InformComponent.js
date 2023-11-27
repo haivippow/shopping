@@ -53,18 +53,18 @@ class Inform extends Component {
         </div>
       
      
-        <div className="float-right" style={{ marginLeft: '30px' }}>
-        {this.state.notifications.length > 0 && (
-                  <span className={`cart__num c-whi f-thin c-red${this.state.notificationBlink ? ' blink' : ''}`}>
-                    Có {this.state.notifications.length}{' '}
-                    <span className={`notification-icon${this.state.notifications.length > 0 ? ' with-notification' : ''}`} onClick={this.toggleNotifications}>
-                      🛎️
-                    </span>{' '}
-                    Thông Báo
-                  </span>
-                )}
+                <div className="float-right" style={{ marginLeft: '30px' }}>
+          {this.state.notifications.length > 0 && (
+            <span className={`cart__num c-whi f-thin c-red${this.state.notificationBlink ? ' blink' : ''}`} style={{ borderColor: this.state.darkMode ? '#yourDarkModeBorderColor' : '#yourLightModeBorderColor' }}>
+              Có {this.state.notifications.length}{' '}
+              <span className={`notification-icon${this.state.notifications.length > 0 ? ' with-notification' : ''}`} onClick={this.toggleNotifications}>
+                🛎️
+              </span>{' '}
+              Thông Báo
+            </span>
+          )}
           {this.state.showNotifications && (
-            <div className="notifications-container right-positioned">
+            <div className={`notifications-container right-positioned ${this.state.darkMode ? 'dark-mode' : ''}`}>
               {this.state.notifications.map((item) => (
                 <div key={item._id} className={'notification-item'}>
                   <span onClick={() => this.selectNotification(item)}>{item.name}</span>
@@ -72,8 +72,8 @@ class Inform extends Component {
               ))}
             </div>
           )}
-        
         </div>
+
         <div className="float-right">
       <div style={{ display: "inline" }} class="form-switch">
         <input class="form-check-input" type="checkbox" onChange={(e) => this.ckbChangeMode(e)} />&nbsp; Light / Dark mode
@@ -108,6 +108,14 @@ class Inform extends Component {
         notificationBlink: !prevState.notificationBlink,
       }));
     }, 1000); // 1 giây
+    this.getCart();
+  }
+  getCart(){
+    const storedMycart = localStorage.getItem('mycart');
+    if (storedMycart) {
+      const mycart = JSON.parse(storedMycart);
+      this.context.setMycart(mycart);
+    }
   }
 
   GetUserToken(){

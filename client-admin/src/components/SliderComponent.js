@@ -1,49 +1,50 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 import MyContext from '../contexts/MyContext';
-import SizeDetail from './SizeDetailComponent';
 
-class Size extends Component {
+import SliderComponent from './SliderDetailComponent';
+
+class Slider extends Component {
   static contextType = MyContext; // using this.context to access global state
   constructor(props) {
     super(props);
     this.state = {
-        sizes: [],
+      sliders: [],
       itemSelected: null
     };
   }
   render() {
-    const cates = this.state.sizes.map((item) => {
+    const cates = this.state.sliders.map((item) => {
       return (
         <tr key={item._id} className="datatable" onClick={() => this.trItemClick(item)}>
           <td>{item._id}</td>
-          <td>{item.name}</td>
+          <td><img src={"data:image/jpg;base64," + item.name} width="100px" height="100px" alt="" /></td>
         </tr>
       );
     });
     return (
       <div>
         <div className="float-left">
-          <h2 className="text-center">DANH SÁCH SIZE</h2>
+          <h2 className="text-center">DANH SÁCH ẢNH SLIDER</h2>
           <table className="datatable" border="1">
             <tbody>
               <tr className="datatable">
                 <th>ID</th>
-                <th>Name Size</th>
+                <th>Hình Ảnh</th>
               </tr>
               {cates}
             </tbody>
           </table>
         </div>
         <div className="inline" />
-     <SizeDetail item={this.state.itemSelected} updateSizes={this.updateSizes} />
+     <SliderComponent item={this.state.itemSelected} updateSliders={this.updateSliders} />
         <div className="float-clear" />
       </div>
     );
   }
 
-  updateSizes = (sizes) => { // arrow-function
-    this.setState({ sizes: sizes });
+  updateSliders = (sliders) => { // arrow-function
+    this.setState({ sliders: sliders });
   }
   componentDidMount() {
     this.apiGetSizes();
@@ -74,10 +75,10 @@ class Size extends Component {
   // apis
   apiGetSizes() {
     const config = { headers: { 'x-access-token': this.context.token  } };
-    axios.get('/api/admin/sizes', config).then((res) => {
+    axios.get('/api/admin/sliders', config).then((res) => {
       const result = res.data;
-      this.setState({ sizes: result });
+      this.setState({ sliders: result });
     });
   }
 }
-export default Size;
+export default Slider;

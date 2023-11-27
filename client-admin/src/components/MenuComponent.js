@@ -17,11 +17,13 @@ class Menu extends Component {
           <li className="menu"><Link to='/admin/order'>Order</Link></li>
           <li className="menu"><Link to='/admin/customer'>Thành Viên</Link></li>
           <li className="menu"><Link to='/admin/notification'>Thông Báo</Link></li>
+          <li className="menu"><Link to='/admin/slider'>Slider</Link></li>
           <li className="menu"><Link to='/admin/contact'>Liên Hệ</Link></li>
 
         </ul>
       </div>
         <div className="float-right">
+          HELLO <b>{this.context.username}</b> {}
         <Link to='/admin/home' onClick={() => this.lnkLogoutClick()}>Đăng Xuất</Link>
         </div>
         <div className="float-clear" />

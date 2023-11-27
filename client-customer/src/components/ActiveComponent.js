@@ -1,8 +1,10 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 import { toast } from 'react-toastify';
+import MyContext from '../contexts/MyContext';
 
 class Active extends Component {
+  static contextType = MyContext; // using this.context to access global state
   constructor(props) {
     super(props);
     this.state = {
@@ -59,6 +61,16 @@ class Active extends Component {
         toast.error("ACTIVE Thất Bại")
       }
     });
+  }
+  componentDidMount(){
+    this.getCart();
+  }
+  getCart(){
+    const storedMycart = localStorage.getItem('mycart');
+    if (storedMycart) {
+      const mycart = JSON.parse(storedMycart);
+      this.context.setMycart(mycart);
+    }
   }
 }
 export default Active;

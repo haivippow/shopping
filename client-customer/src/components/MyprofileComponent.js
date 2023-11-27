@@ -125,7 +125,6 @@ class Myprofile extends Component {
           txtQuan: this.context.customer.address ? this.context.customer.address.quan || '' : '',
           txtThanhpho: this.context.customer.address ? this.context.customer.address.thanhpho || '' : '',
           
-          
         });
       }
      }
@@ -135,10 +134,9 @@ class Myprofile extends Component {
 
   componentDidMount() {
     this.GetUserToken();
-
+    this.getCart();
   }
   
-
   // event-handlers
   btnUpdateClick(e) {
     e.preventDefault();
@@ -151,7 +149,6 @@ class Myprofile extends Component {
       const customer = { username, password, name, phone, email };
       this.apiPutCustomer(this.context.customer._id, customer);
     } else {
-      // alert('Please input all customer information fields');
       toast.info('Vui Lòng Nhập Đầy Đủ Thông Tin')
     }
   }
@@ -168,8 +165,6 @@ class Myprofile extends Component {
     } else {
       toast.info('Vui Lòng Nhập Đầy Đủ Thông Tin')
     }
-
-
   }
 
   // apis
@@ -199,6 +194,14 @@ class Myprofile extends Component {
       }
     });
   }
+  getCart(){
+    const storedMycart = localStorage.getItem('mycart');
+    if (storedMycart) {
+      const mycart = JSON.parse(storedMycart);
+      this.context.setMycart(mycart);
+    }
+  }
+  
   
 
   changeTab(tab) {

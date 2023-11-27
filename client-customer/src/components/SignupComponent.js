@@ -2,8 +2,10 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import withRouter from '../utils/withRouter';
 import { toast } from 'react-toastify';
+import MyContext from '../contexts/MyContext';
 
 class Signup extends Component {
+  static contextType = MyContext; // using this.context to access global state
   constructor(props) {
     super(props);
     this.state = {
@@ -89,6 +91,16 @@ class Signup extends Component {
       this.props.navigate('/active');
 
     });
+  }
+  getCart(){
+    const storedMycart = localStorage.getItem('mycart');
+    if (storedMycart) {
+      const mycart = JSON.parse(storedMycart);
+      this.context.setMycart(mycart);
+    }
+  }
+  componentDidMount(){
+    this.getCart();
   }
 }
 export default withRouter(Signup);

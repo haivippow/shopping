@@ -2,8 +2,11 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import withRouter from '../utils/withRouter';
+import MyContext from '../contexts/MyContext';
+import { toast } from 'react-toastify';
 
 class Product extends Component {
+  static contextType = MyContext; // using this.context to access global state
   constructor(props) {
     super(props);
     this.state = {
@@ -35,6 +38,7 @@ class Product extends Component {
     }else if(params.keyword){
         this.apiGetProductsByKeyword(params.keyword);
     }
+    this.getCart();
   }
   componentDidUpdate(prevProps) { // changed: /product/...
     const params = this.props.params;
@@ -49,7 +53,15 @@ class Product extends Component {
    apiGetProductsByKeyword(keyword) {
     axios.get('/api/customer/products/search/' + keyword).then((res) => {
       const result = res.data;
-      this.setState({ products: result });
+        if (Array.isArray(result) && result.length > 0) {
+          this.setState({ products: result });
+          toast.success("Tìm Kiếm Sản Phẩm Thành Công");
+        } else {
+          // Handle the case where the array is empty or not an array
+           toast.error("Không Tìm Thấy Sản Phẩm");
+        }
+        
+      
     });
   }
   // apis
@@ -58,6 +70,13 @@ class Product extends Component {
       const result = res.data;
       this.setState({ products: result });
     });
+  }
+  getCart(){
+    const storedMycart = localStorage.getItem('mycart');
+    if (storedMycart) {
+      const mycart = JSON.parse(storedMycart);
+      this.context.setMycart(mycart);
+    }
   }
 }
 export default withRouter(Product);
