@@ -13,6 +13,19 @@ const OrderDAO = {
     const orders = await Models.Order.find(query).exec();
     return orders;
   },
+  async calculateApprovedRevenue(status) {
+    const query = {'status':status};
+    const orders = await Models.Order.find(query).exec();
+    const totalApprovedRevenue = orders.reduce((sum, order) => sum + order.total, 0);
+  return totalApprovedRevenue;
+  },
+
+  async selectStatus(status) {
+    const query = {'status':status};
+    const Count = await Models.Order.find(query).count().exec();
+    return Count;
+  },
+
 
   async selectAll() {
     const query = {};

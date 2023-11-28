@@ -7,6 +7,12 @@ const CustomerDAO = {
     const customer = await Models.Customer.findOne(query);
     return customer;
   },
+  async selectSLAll() {
+    const query = {};
+    const Count = await Models.Customer.find(query).count().exec();
+    return Count;
+  },
+  
   async insert(customer) {
     const mongoose = require('mongoose');
     customer._id = new mongoose.Types.ObjectId();
@@ -24,19 +30,9 @@ const CustomerDAO = {
     const customer = await Models.Customer.findOne(query);
     return customer;
   },
-  async select_token_web(token_web) {
-    const query = { $or: [ { token_web: token_web }] };
-    const customer = await Models.Customer.findOne(query);
-    return customer;
-  },
   async update(customer) {
     const newvalues = { username: customer.username, password: customer.password, name: customer.name, phone: customer.phone, email: customer.email };
     const result = await Models.Customer.findByIdAndUpdate(customer._id, newvalues, { new: true });
-    return result;
-  },
-  async update_token_web(customerId,token_web) {
-    const newvalues = { token_web: token_web };
-    const result = await Models.Customer.findByIdAndUpdate(customerId, newvalues, { new: true });
     return result;
   },
   async updateAddress(customerId, addressUpdate) {

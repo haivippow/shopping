@@ -158,6 +158,25 @@ router.put('/customers/deactive/:id', JwtUtil.checkToken, async function(req, re
   res.json(result);
 });
 
+router.get('/thongke', JwtUtil.checkToken, async function(req, res) {
+  const customerCount = await CustomerDAO.selectSLAll();
+  const categoryCount = await CategoryDAO.selectSLAll();
+  const orderCountPENDING = await OrderDAO.selectStatus('PENDING');
+  const orderCountAPPROVED = await OrderDAO.selectStatus('APPROVED');
+  const orderCountCANCELED = await OrderDAO.selectStatus('CANCELED');
+  const doanhthu = await OrderDAO.calculateApprovedRevenue('APPROVED');
+  const productCount = await ProductDAO.selectByCount();
+  const notiCount = await NotificationDAO.selectSLAll();
+  const sizeCount = await SizeDAO.selectSLAll();
+  const sliderCount = await SliderDAO.selectSLAll();
+  
+  res.json({ customersCount: customerCount, categoriesCount: categoryCount ,
+    orderCountPENDING:orderCountPENDING,orderCountAPPROVED:orderCountAPPROVED,orderCountCANCELED:orderCountCANCELED,
+    productCount:productCount,notiCount:notiCount,sizeCount:sizeCount,sliderCount:sliderCount,doanhthu:doanhthu,
+  
+  });
+});
+
 // utils
 const EmailUtil = require('../utils/EmailUtil');
 // customer

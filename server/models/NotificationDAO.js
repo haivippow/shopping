@@ -2,6 +2,11 @@ require('../utils/MongooseUtil');
 const Models = require('./Models');
 
 const NotificationDAO = {
+  async selectSLAll() {
+    const query = {};
+    const Count = await Models.Notification.find(query).count().exec();
+    return Count;
+  },
   async selectAll() {
     const query = {};
     const notification = await Models.Notification.find(query).exec();

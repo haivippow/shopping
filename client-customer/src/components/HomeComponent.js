@@ -26,11 +26,6 @@ class Home extends Component {
             </figure>
           </div>
         );
-<<<<<<< HEAD
-      }else{
-        return null
-=======
->>>>>>> 77f849f438bf85d317a1205c044a02c62f8ce540
       }
     });
     const hotprods = this.state.hotprods.map((item) => {
@@ -45,11 +40,6 @@ class Home extends Component {
           </div>
           
         );
-<<<<<<< HEAD
-      }else{
-        return null
-=======
->>>>>>> 77f849f438bf85d317a1205c044a02c62f8ce540
       }
     });
     return (

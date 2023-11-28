@@ -21,7 +21,7 @@ class Product extends Component {
         <tr key={item._id} className="datatable" onClick={() => this.trItemClick(item)}>
           <td>{item._id}</td>
           <td>{item.name}</td>
-          <td>{item.price}</td>
+          <td>{(item.price).toLocaleString('vi-VN')} VNĐ</td>
           <td>{new Date(item.cdate).toLocaleString()}</td>
           <td>{item.category.name}</td>
           <td><img src={"data:image/jpg;base64," + item.image} width="100px" height="100px" alt="" /></td>

@@ -2,6 +2,7 @@ require('../utils/MongooseUtil');
 const Models = require('./Models');
 
 const ProductDAO = {
+  
   async selectByCount() {
     const query = {};
     const noProducts = await Models.Product.find(query).count().exec();

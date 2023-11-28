@@ -7,6 +7,11 @@ const SizeDAO = {
     const size = await Models.Size.find(query).exec();
     return size;
   },
+  async selectSLAll() {
+    const query = {};
+    const Count = await Models.Size.find(query).count().exec();
+    return Count;
+  },
   async insert(size) {
     const mongoose = require('mongoose');
     size._id = new mongoose.Types.ObjectId();

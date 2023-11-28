@@ -18,6 +18,7 @@ class Menu extends Component {
           <li className="menu"><Link to='/admin/customer'>Thành Viên</Link></li>
           <li className="menu"><Link to='/admin/notification'>Thông Báo</Link></li>
           <li className="menu"><Link to='/admin/slider'>Slider</Link></li>
+          <li className="menu"><Link to='/admin/thongke'>Thống Kê</Link></li>
           <li className="menu"><Link to='/admin/contact'>Liên Hệ</Link></li>
 
         </ul>

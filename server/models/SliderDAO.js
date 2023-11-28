@@ -7,6 +7,11 @@ const SliderDAO = {
     const slider = await Models.Slider.find(query).exec();
     return slider;
   },
+  async selectSLAll() {
+    const query = {};
+    const Count = await Models.Slider.find(query).count().exec();
+    return Count;
+  },
   async insert(slider) {
     const mongoose = require('mongoose');
     slider._id = new mongoose.Types.ObjectId();

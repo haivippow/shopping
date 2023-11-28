@@ -2,6 +2,11 @@ require('../utils/MongooseUtil');
 const Models = require('./Models');
 
 const CategoryDAO = {
+  async selectSLAll() {
+    const query = {};
+    const Count = await Models.Category.find(query).count().exec();
+    return Count;
+  },
   async selectAll() {
     const query = {};
     const categories = await Models.Category.find(query).exec();

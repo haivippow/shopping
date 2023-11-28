@@ -44,9 +44,6 @@ class Menu extends Component {
               <span style={{ margin: '0 10px' }}></span>
               <input type="submit" value="Tìm Kiếm" onClick={(e) => this.btnSearchClick(e)} />
             </li>
-          <li className="menu"><Link to='/contactinfo' style={{ textDecoration: 'none' }}>Thông Tin Liên Hệ</Link></li>
-           
-            <li className="menu"><Link to='/gmap' style={{ textDecoration: 'none' }}>Địa Chỉ SHOP</Link></li>
           </ul>
           
         </div>

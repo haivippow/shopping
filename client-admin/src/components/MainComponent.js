@@ -13,6 +13,7 @@ import Contact from './ContactComponent';
 import Slider from './SliderComponent';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Satistics from './StatisticsComponent';
 
 
 class Main extends Component {
@@ -34,6 +35,7 @@ class Main extends Component {
           <Route path='/admin/size' element={<Size />} />
           <Route path='/admin/contact' element={<Contact />} />
           <Route path='/admin/slider' element={<Slider />} />
+          <Route path='/admin/thongke' element={<Satistics />} />
 
 
         </Routes>
